@@ -10,8 +10,4 @@ public class EntitiesAndDtos {
     public UserDTO convertToDTO(User user) {
         return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt(), user.isActive());
     }
-
-    public User convertToEntity(UserDTO userDTO) {
-        return new User(userDTO.getId(), userDTO.getEmail(), userDTO.getName(), userDTO.getCreatedAt(), userDTO.isActive(), null);
-    }
 }

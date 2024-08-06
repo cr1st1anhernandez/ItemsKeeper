@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,15 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
-    public User(Long id, String email, String name, LocalDateTime createdAt, boolean active, Set<Role>roles ) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.active = active;
-        this.roles = roles;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +32,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(max = 60)
+    @Size(max = 50)
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
@@ -63,4 +55,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Collection> collections;
 }
