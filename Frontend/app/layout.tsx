@@ -7,6 +7,7 @@ import { Providers } from './providers';
 import { Navbar } from '@/components/navbar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
+import { SideBar } from '@/components/sidebar';
 
 export const metadata: Metadata = {
   title: {
@@ -38,7 +39,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <Navbar />
-          <main>{children}</main>
+          <div className="flex h-full w-full">
+            <SideBar />
+            <main className="h-full w-full px-6">{children}</main>
+          </div>
         </Providers>
       </body>
     </html>
