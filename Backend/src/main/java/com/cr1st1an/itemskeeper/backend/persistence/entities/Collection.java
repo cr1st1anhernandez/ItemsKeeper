@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "collections")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

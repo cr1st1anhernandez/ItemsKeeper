@@ -11,9 +11,9 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
-@Table(name = "items")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,4 +42,7 @@ public class Item {
 
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> customFields;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments;
 }

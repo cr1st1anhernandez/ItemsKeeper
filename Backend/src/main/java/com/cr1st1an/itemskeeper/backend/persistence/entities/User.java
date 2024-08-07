@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -58,4 +57,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collection> collections;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments;
 }
