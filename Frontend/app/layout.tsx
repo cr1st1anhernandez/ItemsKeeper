@@ -38,10 +38,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
-          <Navbar />
-          <div className="flex h-full w-full">
-            <SideBar />
-            <main className="h-full w-full px-6">{children}</main>
+          <div className="flex h-[100dvh] min-h-[100dvh] w-full flex-col">
+            <Navbar />
+            <div className="flex h-full w-full">
+              <SideBar />
+              <main className="h-full w-full px-6">{children}</main>
+            </div>
           </div>
         </Providers>
       </body>

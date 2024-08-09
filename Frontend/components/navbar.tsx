@@ -32,12 +32,12 @@ export const Navbar = () => {
         </NavbarItem>
         <NavbarItem className="hidden gap-2 sm:flex">
           <Button as={Link} color="primary" href="/auth/login">
-            Login
+            Log In
           </Button>
         </NavbarItem>
         <NavbarItem className="hidden gap-2 sm:flex">
-          <Button as={Link} color="primary" href="/auth/register" variant="flat">
-            Register
+          <Button as={Link} color="primary" href="/auth/signup" variant="flat">
+            Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
@@ -45,7 +45,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
         <ThemeSwitch />
         <Button as={Link} color="primary" href="/auth/login">
-          Login
+          Log In
         </Button>
         <NavbarMenuToggle />
       </NavbarContent>
