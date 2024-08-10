@@ -40,7 +40,7 @@ public class AdminServiceImpl implements IAdminService {
 
         User user = userOptional.get();
         Role role = roleOptional.get();
-        user.getRoles().add(role);
+        user.setRole(role);
         userRepository.save(user);
 
         return "Role assigned successfully";
@@ -59,7 +59,7 @@ public class AdminServiceImpl implements IAdminService {
 
         User user = userOptional.get();
         Role role = roleOptional.get();
-        user.getRoles().remove(role);
+        user.setRole(role);
         userRepository.save(user);
 
         return "Role removed successfully";
@@ -76,7 +76,7 @@ public class AdminServiceImpl implements IAdminService {
         }
 
         User user = userOptional.get();
-        user.setActive(false);
+        user.setBlocked(true);
         userRepository.save(user);
 
         return "User blocked successfully";
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements IAdminService {
         }
 
         User user = userOptional.get();
-        user.setActive(true);
+        user.setBlocked(false);
         userRepository.save(user);
 
         return "User unblocked successfully";

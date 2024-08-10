@@ -9,6 +9,7 @@ import com.cr1st1an.itemskeeper.backend.services.models.validations.UserValidati
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
 import com.cr1st1an.itemskeeper.backend.services.IAuthService;
 import com.cr1st1an.itemskeeper.backend.services.IJWTUtilityService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class AuthServiceImpl implements IAuthService {
                 return jwt;
             }
             Long userId = user.get().getId();
-            if (!userRepository.isUserActive(userId)) {
+            if (userRepository.isUserBlocked(userId)) {
                 jwt.put("error", "User is blocked!");
                 return jwt;
             }
@@ -64,10 +65,10 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO register(User user) throws Exception {
         try {
             ResponseDTO response = userValidations.validate(user);
-            List<User> getAllUsers = userRepository.findAll();
 
             if (response.getNumOfErrors() > 0){
                 return response;
@@ -89,7 +90,8 @@ public class AuthServiceImpl implements IAuthService {
             user.setPassword(encoder.encode(user.getPassword()));
             Role userRole = roleRepository.findByName("USER")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            user.setRoles(Collections.singleton(userRole));
+            user.setRole(userRole);
+            userRepository.save(user);
             response.setMessage("User created successfully!");
             return response;
         } catch (Exception e) {

@@ -9,7 +9,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +16,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "items")
 public class Item {
 
     @Id
@@ -24,7 +24,7 @@ public class Item {
     private Long id;
 
     @ElementCollection
-    private List<String> tags;
+    private Set<String> tags;
 
     @ManyToOne
     @JoinColumn(name = "collection_id", nullable = false)

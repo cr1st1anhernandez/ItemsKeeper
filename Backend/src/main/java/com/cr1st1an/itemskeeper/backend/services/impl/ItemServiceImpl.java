@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.List;
 
 @Service
 public class ItemServiceImpl implements IItemService {
@@ -23,7 +24,7 @@ public class ItemServiceImpl implements IItemService {
     private CollectionRepository collectionRepository;
 
     @Transactional
-    public Item createItem(Long collectionId, String name, List<String> tags, Map<String, Object> customFieldValues) {
+    public Item createItem(Long collectionId, String name, Set<String> tags, Map<String, Object> customFieldValues) {
         Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new RuntimeException("Collection not found"));
         Item item = new Item();
         item.setName(name);
@@ -42,7 +43,7 @@ public class ItemServiceImpl implements IItemService {
     }
 
     @Transactional
-    public Item updateItem(Long itemId, String name, List<String> tags, Map<String, Object> customFieldValues) {
+    public Item updateItem(Long itemId, String name, Set<String> tags, Map<String, Object> customFieldValues) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item not found"));
         item.setName(name);
         item.setTags(tags);

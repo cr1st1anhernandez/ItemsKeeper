@@ -1,15 +1,18 @@
 package com.cr1st1an.itemskeeper.backend.persistence.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String text;
 
     @ManyToOne

@@ -31,7 +31,7 @@ public class UserServiceImpl implements IUserService {
 
             existingUser.setName(userDTO.getName());
             existingUser.setEmail(userDTO.getEmail());
-            existingUser.setActive(userDTO.isActive());
+            existingUser.setBlocked(userDTO.isBlocked());
             existingUser.setCreatedAt(userDTO.getCreatedAt());
 
             userRepository.save(existingUser);

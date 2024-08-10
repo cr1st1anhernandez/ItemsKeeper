@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/collections/{collectionId}/items")
@@ -17,7 +18,7 @@ public class ItemController {
     private IItemService itemService;
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@PathVariable Long collectionId, @RequestParam String name, @RequestParam List<String> tags, @RequestParam Map<String, Object> customFieldValues) {
+    public ResponseEntity<Item> createItem(@PathVariable Long collectionId, @RequestParam String name, @RequestParam Set<String> tags, @RequestParam Map<String, Object> customFieldValues) {
         Item item = itemService.createItem(collectionId, name, tags, customFieldValues);
         return ResponseEntity.ok(item);
     }
@@ -33,7 +34,7 @@ public class ItemController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long itemId, @RequestParam String name, @RequestParam List<String> tags, @RequestParam Map<String, Object> customFieldValues) {
+    public ResponseEntity<Item> updateItem(@PathVariable Long itemId, @RequestParam String name, @RequestParam Set<String> tags, @RequestParam Map<String, Object> customFieldValues) {
         Item item = itemService.updateItem(itemId, name, tags, customFieldValues);
         return ResponseEntity.ok(item);
     }

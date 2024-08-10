@@ -17,43 +17,39 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @NotBlank
     @Email
     @Size(max = 100)
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
     @NotBlank
     @Size(max = 50)
-    @Column(name = "name", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     @NotBlank
     @Size(min = 8, max = 255)
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
+    @Column(nullable = false)
+    private boolean blocked = false;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collection> collections;
