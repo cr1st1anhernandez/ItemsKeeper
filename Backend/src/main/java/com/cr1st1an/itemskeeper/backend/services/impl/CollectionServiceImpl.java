@@ -1,14 +1,18 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
+import com.cr1st1an.itemskeeper.backend.persistence.entities.Category;
+import com.cr1st1an.itemskeeper.backend.persistence.respositories.CategoryRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.CollectionRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICollectionService;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.CategoryDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
-import com.cr1st1an.itemskeeper.backend.utils.EntitiesAndDtos;
+import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,51 +23,71 @@ import com.cr1st1an.itemskeeper.backend.persistence.entities.Collection;
 @Service
 public class CollectionServiceImpl implements ICollectionService {
 
-    EntitiesAndDtos entitiesAndDtos = new EntitiesAndDtos();
+    private final ConvertToDTOS convertToDTOS;
+    private final CollectionRepository collectionRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    private CollectionRepository collectionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, CategoryRepository categoryRepository, ConvertToDTOS convertToDTOS) {
+        this.collectionRepository = collectionRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.convertToDTOS = convertToDTOS;
+    }
 
     @Override
     public CollectionDTO createCollection(CollectionDTO collectionDTO) {
         User user = userRepository.findById(collectionDTO.getUserId()).orElse(null);
+        CategoryDTO categoryDTO = collectionDTO.getCategory();
+        Category category = categoryRepository.findByName(categoryDTO.getName()).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
+        } else if (category == null) {
+            throw new RuntimeException("Category not found");
         }
         Collection collection = new Collection();
         collection.setName(collectionDTO.getName());
         collection.setDescription(collectionDTO.getDescription());
-        collection.setCategory(collectionDTO.getCategory());
-        collection.setImageUrl(collectionDTO.getImageUrl());
         collection.setUser(user);
-
+        collection.setCategory(category);
+        collection.setImageUrl(collectionDTO.getImageUrl());
         Collection savedCollection = collectionRepository.save(collection);
-        return entitiesAndDtos.convertCollectionToDTO(savedCollection);
+        return convertToDTOS.convertCollectionToDTO(savedCollection);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CollectionDTO> getAllCollections() {
-        return collectionRepository.findAll().stream()
-                .map(entitiesAndDtos::convertCollectionToDTO)
+        List<Collection> collections = collectionRepository.findAll();
+        collections.forEach(collection -> Hibernate.initialize(collection.getCategory()));
+        return collections.stream()
+                .map(convertToDTOS::convertCollectionToDTO)
                 .collect(Collectors.toList());
     }
 
     public Optional<CollectionDTO> getCollectionById(Long collectionId) {
-        return collectionRepository.findById(collectionId).map(entitiesAndDtos::convertCollectionToDTO);
+        return collectionRepository.findById(collectionId).map(convertToDTOS::convertCollectionToDTO);
     }
 
     @Transactional
     public CollectionDTO updateCollection(Long collectionId, CollectionDTO collectionDTO) {
         Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new RuntimeException("Collection not found"));
+        CategoryDTO categoryDTO = collectionDTO.getCategory();
+        Category category = categoryRepository.findByName(categoryDTO.getName()).orElse(null);
+        if(category == null) {
+            throw new RuntimeException("Category not found");
+        } else if (!collectionDTO.getUserId().equals(collection.getUser().getId())) {
+            throw new RuntimeException("User not found");
+        } else if (!collectionDTO.getCategory().getName().equals(collection.getCategory().getName())) {
+            throw new RuntimeException("Category not found");
+        }
         collection.setName(collectionDTO.getName());
         collection.setDescription(collectionDTO.getDescription());
-        collection.setCategory(collectionDTO.getCategory());
+        collection.setCategory(category);
         collection.setImageUrl(collectionDTO.getImageUrl());
         Collection savedCollection = collectionRepository.save(collection);
-        return entitiesAndDtos.convertCollectionToDTO(savedCollection);
+        return convertToDTOS.convertCollectionToDTO(savedCollection);
     }
 
     @Transactional

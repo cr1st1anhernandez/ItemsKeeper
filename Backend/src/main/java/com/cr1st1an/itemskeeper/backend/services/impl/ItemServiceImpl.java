@@ -2,57 +2,92 @@ package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Collection;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Item;
+import com.cr1st1an.itemskeeper.backend.persistence.entities.Tag;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.CollectionRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.ItemRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.respositories.TagRepository;
 import com.cr1st1an.itemskeeper.backend.services.IItemService;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.ItemDTO;
+import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements IItemService {
 
-    @Autowired
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
+    private final CollectionRepository collectionRepository;
+    private final TagRepository tagRepository;
+    private final ConvertToDTOS convertToDTOS = new ConvertToDTOS();
 
     @Autowired
-    private CollectionRepository collectionRepository;
+    public ItemServiceImpl(ItemRepository itemRepository, CollectionRepository collectionRepository, TagRepository tagRepository) {
+        this.itemRepository = itemRepository;
+        this.collectionRepository = collectionRepository;
+        this.tagRepository = tagRepository;
+    }
 
     @Transactional
-    public Item createItem(Long collectionId, String name, Set<String> tags, Map<String, Object> customFieldValues) {
-        Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new RuntimeException("Collection not found"));
+    public ItemDTO createItem(ItemDTO itemDTO) {
+        Collection collection = collectionRepository.findById(itemDTO.getCollectionId())
+                .orElseThrow(() -> new RuntimeException("Collection not found"));
         Item item = new Item();
-        item.setName(name);
-        item.setTags(tags);
-        item.setCustomFields(customFieldValues);
+        item.setName(itemDTO.getName());
+        item.setTags(itemDTO.getTags().stream().map(tagDTO -> {
+            Tag tag = tagRepository.findByName(tagDTO.getName())
+                    .orElseGet(() -> tagRepository.save(new Tag()));
+            tag.setName(tagDTO.getName());
+            return tag;
+        }).collect(Collectors.toSet()));
+        item.setCustomFields(itemDTO.getCustomFields());
         item.setCollection(collection);
-        return itemRepository.save(item);
-    }
+        item.setImageUrl(itemDTO.getImageUrl());
 
-    public List<Item> getItemsByCollectionId(Long collectionId) {
-        return itemRepository.findByCollectionId(collectionId);
-    }
-
-    public Optional<Item> getItemById(Long itemId) {
-        return itemRepository.findById(itemId);
+        Item savedItem = itemRepository.save(item);
+        return convertToDTOS.convertItemToDTO(savedItem);
     }
 
     @Transactional
-    public Item updateItem(Long itemId, String name, Set<String> tags, Map<String, Object> customFieldValues) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item not found"));
-        item.setName(name);
-        item.setTags(tags);
-        item.setCustomFields(customFieldValues);
-        return itemRepository.save(item);
+    public List<ItemDTO> getItemsByCollectionId(Long collectionId) {
+        List<Item> items = itemRepository.findByCollectionId(collectionId);
+        return items.stream()
+                .map(convertToDTOS::convertItemToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<ItemDTO> getItemById(Long itemId) {
+        return itemRepository.findById(itemId).map(convertToDTOS::convertItemToDTO);
+    }
+
+    @Transactional
+    public ItemDTO updateItem(Long itemId, ItemDTO itemDTO) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        item.setName(itemDTO.getName());
+        item.setTags(itemDTO.getTags().stream().map(tagDTO -> {
+            Tag tag = tagRepository.findByName(tagDTO.getName())
+                    .orElseGet(() -> tagRepository.save(new Tag()));
+            tag.setName(tagDTO.getName());
+            return tag;
+        }).collect(Collectors.toSet()));
+        item.setCustomFields(itemDTO.getCustomFields());
+        item.setImageUrl(itemDTO.getImageUrl());
+
+        Item updatedItem = itemRepository.save(item);
+        return convertToDTOS.convertItemToDTO(updatedItem);
     }
 
     @Transactional
     public void deleteItem(Long itemId) {
         itemRepository.deleteById(itemId);
     }
+
 }

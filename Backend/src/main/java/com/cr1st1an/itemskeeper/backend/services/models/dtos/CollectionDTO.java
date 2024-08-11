@@ -21,7 +21,7 @@ public class CollectionDTO {
 
     @NotBlank(message = "Category is required")
     @Size(max = 50, message = "Category must be less than or equal to 50 characters")
-    private String category;
+    private CategoryDTO category;
 
     private String imageUrl;
 

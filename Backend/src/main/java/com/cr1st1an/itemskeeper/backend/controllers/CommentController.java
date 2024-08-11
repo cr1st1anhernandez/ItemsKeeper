@@ -1,7 +1,7 @@
 package com.cr1st1an.itemskeeper.backend.controllers;
 
 import com.cr1st1an.itemskeeper.backend.services.ICommentService;
-import com.cr1st1an.itemskeeper.backend.persistence.entities.Comment;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +9,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/items/{itemId}/comments")
+@RequestMapping("/api/v1/items/{itemId}/comments")
 public class CommentController {
 
+    private final ICommentService commentService;
+
     @Autowired
-    private ICommentService commentService;
+    public CommentController(ICommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @PostMapping
-    public ResponseEntity<Comment> addComment(@PathVariable Long itemId, @RequestParam Long userId, @RequestParam String content) {
-        Comment comment = commentService.addComment(itemId, userId, content);
+    public ResponseEntity<CommentDTO> addComment(@PathVariable Long itemId, @RequestBody CommentDTO commentDTO) {
+        CommentDTO comment = commentService.addComment(itemId, commentDTO);
         return ResponseEntity.ok(comment);
     }
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getCommentsByItemId(@PathVariable Long itemId) {
+    public ResponseEntity<List<CommentDTO>> getCommentsByItemId(@PathVariable Long itemId) {
         return ResponseEntity.ok(commentService.getCommentsByItemId(itemId));
     }
 }

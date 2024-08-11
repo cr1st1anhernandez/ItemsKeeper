@@ -1,42 +1,33 @@
 package com.cr1st1an.itemskeeper.backend.controllers;
 
-import com.cr1st1an.itemskeeper.backend.persistence.entities.Item;
 import com.cr1st1an.itemskeeper.backend.services.IItemService;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.ItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 @RestController
-@RequestMapping("/api/collections/{collectionId}/items")
+@RequestMapping("/api/v1/items")
 public class ItemController {
 
+    private final IItemService itemService;
+
     @Autowired
-    private IItemService itemService;
-
-    @PostMapping
-    public ResponseEntity<Item> createItem(@PathVariable Long collectionId, @RequestParam String name, @RequestParam Set<String> tags, @RequestParam Map<String, Object> customFieldValues) {
-        Item item = itemService.createItem(collectionId, name, tags, customFieldValues);
-        return ResponseEntity.ok(item);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Item>> getItemsByCollectionId(@PathVariable Long collectionId) {
-        return ResponseEntity.ok(itemService.getItemsByCollectionId(collectionId));
+    public ItemController(IItemService itemService) {
+        this.itemService = itemService;
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Item> getItemById(@PathVariable Long itemId) {
-        return itemService.getItemById(itemId).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ItemDTO> getItemById(@PathVariable Long itemId) {
+        return itemService.getItemById(itemId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long itemId, @RequestParam String name, @RequestParam Set<String> tags, @RequestParam Map<String, Object> customFieldValues) {
-        Item item = itemService.updateItem(itemId, name, tags, customFieldValues);
-        return ResponseEntity.ok(item);
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemDTO itemDTO) {
+        ItemDTO updatedItem = itemService.updateItem(itemId, itemDTO);
+        return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/{itemId}")

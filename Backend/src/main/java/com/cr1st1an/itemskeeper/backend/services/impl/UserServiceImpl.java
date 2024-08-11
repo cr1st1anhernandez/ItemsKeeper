@@ -6,21 +6,25 @@ import com.cr1st1an.itemskeeper.backend.services.models.dtos.UserDTO;
 import com.cr1st1an.itemskeeper.backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cr1st1an.itemskeeper.backend.utils.EntitiesAndDtos;
+import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
 
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
-    @Autowired
-    UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final ConvertToDTOS convertToDTOS;
 
     @Autowired
-    EntitiesAndDtos entitiesAndDtos;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.convertToDTOS = new ConvertToDTOS();
+    }
 
     public UserDTO getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.map(entitiesAndDtos::convertToDTO).orElse(null);
+        return user.map(convertToDTOS::convertUserToDTO).orElse(null);
     }
 
     @Override
@@ -35,7 +39,7 @@ public class UserServiceImpl implements IUserService {
             existingUser.setCreatedAt(userDTO.getCreatedAt());
 
             userRepository.save(existingUser);
-            return entitiesAndDtos.convertToDTO(existingUser);
+            return convertToDTOS.convertUserToDTO(existingUser);
         }
         return null;
     }

@@ -1,10 +1,10 @@
 package com.cr1st1an.itemskeeper.backend.services;
 
-import com.cr1st1an.itemskeeper.backend.persistence.entities.Comment;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.CommentDTO;
 
 import java.util.List;
 
 public interface ICommentService {
-        public Comment addComment(Long itemId, Long userId, String content);
-        public List<Comment> getCommentsByItemId(Long itemId);
+        public CommentDTO addComment(Long itemId, CommentDTO commentDTO);
+        public List<CommentDTO> getCommentsByItemId(Long itemId);
 }

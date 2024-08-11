@@ -13,11 +13,14 @@ import java.util.Optional;
 @Service
 public class AdminServiceImpl implements IAdminService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    public AdminServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     private Optional<User> findUserByName(String username) {
         return userRepository.findByName(username);

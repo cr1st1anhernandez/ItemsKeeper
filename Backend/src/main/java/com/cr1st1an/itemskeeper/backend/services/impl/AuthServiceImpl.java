@@ -4,6 +4,7 @@ import com.cr1st1an.itemskeeper.backend.persistence.entities.Role;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.RoleRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginDTO;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginResponseDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.ResponseDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.validations.UserValidations;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
@@ -14,47 +15,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements IAuthService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final IJWTUtilityService jwtUtilityService;
+    private final UserValidations userValidations;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private IJWTUtilityService jwtUtilityService;
-
-    @Autowired
-    private UserValidations userValidations;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    public AuthServiceImpl(UserRepository userRepository, IJWTUtilityService jwtUtilityService, UserValidations userValidations, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.jwtUtilityService = jwtUtilityService;
+        this.userValidations = userValidations;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
-    public HashMap<String, String> login(LoginDTO loginRequest) throws Exception {
+    public LoginResponseDTO login(LoginDTO loginRequest) throws Exception {
         try {
-            HashMap<String, String> jwt = new HashMap<>();
+            LoginResponseDTO responseDTO = new LoginResponseDTO();
             Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
 
             if (user.isEmpty()) {
-                jwt.put("error", "User not registered!");
-                return jwt;
+                responseDTO.setError("User not registered!");
+                return responseDTO;
             }
             Long userId = user.get().getId();
-            if (userRepository.isUserBlocked(userId)) {
-                jwt.put("error", "User is blocked!");
-                return jwt;
+            Optional<Boolean> isUserBlocked = userRepository.isUserBlocked(user.get().getId());
+            if (isUserBlocked.orElse(false)) {
+                responseDTO.setError("User is blocked!");
+                return responseDTO;
             }
             if (verifyPassword(loginRequest.getPassword(), user.get().getPassword())) {
-                jwt.put("jwt", jwtUtilityService.generateJWT(user.get().getId()));
+                responseDTO.setJwt(jwtUtilityService.generateJWT(user.get().getId()));
+                responseDTO.setUserId(user.get().getId());
+                responseDTO.setError(null);
             } else {
-                jwt.put("error", "Invalid credentials");
+                responseDTO.setError("Invalid Credentials!");
             }
-            return jwt;
+            return responseDTO;
         } catch (IllegalArgumentException e) {
             System.err.println("Error generating JWT: " + e.getMessage());
             throw new Exception("Error generating JWT", e);

@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName(String name);
     Optional<User> findByEmail(String email);
     @Query("SELECT u.blocked FROM User u WHERE u.id = :id")
-    Boolean isUserBlocked(@Param("id") Long id);
+    Optional<Boolean> isUserBlocked(@Param("id") Long id);
 }
 
 
