@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +31,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/collections/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/items/{itemId}/comments/**").permitAll()
+                                .anyRequest().authenticated()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
