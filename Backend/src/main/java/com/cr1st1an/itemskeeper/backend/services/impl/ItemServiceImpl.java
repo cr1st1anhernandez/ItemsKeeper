@@ -7,11 +7,11 @@ import com.cr1st1an.itemskeeper.backend.persistence.respositories.CollectionRepo
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.ItemRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.TagRepository;
 import com.cr1st1an.itemskeeper.backend.services.IItemService;
-import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.ItemDTO;
 import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +35,26 @@ public class ItemServiceImpl implements IItemService {
     }
 
     @Transactional
+    public List<ItemDTO> getLastAddedItems() {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<Item> lastItems = itemRepository.findLastAddedItems(pageable);
+        return lastItems.stream()
+                .map(convertToDTOS::convertItemToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public ItemDTO createItem(ItemDTO itemDTO) {
         Collection collection = collectionRepository.findById(itemDTO.getCollectionId())
                 .orElseThrow(() -> new RuntimeException("Collection not found"));
         Item item = new Item();
         item.setName(itemDTO.getName());
-        item.setTags(itemDTO.getTags().stream().map(tagDTO -> {
-            Tag tag = tagRepository.findByName(tagDTO.getName())
-                    .orElseGet(() -> tagRepository.save(new Tag()));
-            tag.setName(tagDTO.getName());
-            return tag;
-        }).collect(Collectors.toSet()));
+        item.setTags(itemDTO.getTags().stream().map(tagDTO -> tagRepository.findByName(tagDTO.getName())
+                .orElseGet(() -> {
+                    Tag newTag = new Tag();
+                    newTag.setName(tagDTO.getName());
+                    return tagRepository.save(newTag);
+                })).collect(Collectors.toSet()));
         item.setCustomFields(itemDTO.getCustomFields());
         item.setCollection(collection);
         item.setImageUrl(itemDTO.getImageUrl());

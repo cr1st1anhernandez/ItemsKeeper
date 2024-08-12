@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CollectionDTO {
     private Long id;
 
@@ -27,4 +29,9 @@ public class CollectionDTO {
 
     @NotNull(message = "User ID is required")
     private Long userId;
+
+    @NotNull(message = "Item count is required")
+    private int itemCount;
+
+    private String creatorName;
 }

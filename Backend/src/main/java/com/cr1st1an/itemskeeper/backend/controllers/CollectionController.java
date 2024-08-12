@@ -27,6 +27,12 @@ public class CollectionController {
         this.itemService = itemService;
     }
 
+    @GetMapping("/top")
+    public ResponseEntity<List<CollectionDTO>> getTopCollections() {
+        List<CollectionDTO> topCollections = collectionService.getTopCollections();
+        return ResponseEntity.ok(topCollections);
+    }
+
     @PostMapping
     public ResponseEntity<CollectionDTO> createCollection(@RequestBody CollectionDTO collectionDTO) {
         User user = userRepository.findById(collectionDTO.getUserId()).orElse(null);

@@ -18,6 +18,8 @@ public class ItemDTO {
     private Set<TagDTO> tags;
     @NotBlank
     private Long collectionId;
+    private String collectionName;
+    private String creatorName;
     @NotBlank
     @Size(min = 1, max = 255)
     private String name;

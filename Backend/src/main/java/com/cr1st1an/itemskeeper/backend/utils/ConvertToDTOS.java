@@ -13,13 +13,28 @@ import java.util.stream.Collectors;
 public class ConvertToDTOS {
 
     public UserDTO convertUserToDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt(), user.isBlocked());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setCreatedAt(user.getCreatedAt());
+        userDTO.setBlocked(user.isBlocked());
+        return userDTO;
     }
 
     public CollectionDTO convertCollectionToDTO(Collection collection) {
         String categoryName = collection.getCategory() != null ? collection.getCategory().getName() : null;
         CategoryDTO categoryDTO = new CategoryDTO(categoryName);
-        return new CollectionDTO(collection.getId(), collection.getName(), collection.getDescription(), categoryDTO ,collection.getImageUrl(), collection.getUser().getId());
+        CollectionDTO collectionDTO = new CollectionDTO();
+        collectionDTO.setId(collection.getId());
+        collectionDTO.setName(collection.getName());
+        collectionDTO.setDescription(collection.getDescription());
+        collectionDTO.setCategory(categoryDTO);
+        collectionDTO.setImageUrl(collection.getImageUrl());
+        collectionDTO.setUserId(collection.getUser().getId());
+        collectionDTO.setItemCount(collection.getItems().size());
+        collectionDTO.setCreatorName(collection.getUser().getName());
+        return collectionDTO;
     }
 
     public ItemDTO convertItemToDTO(Item item) {
@@ -27,6 +42,16 @@ public class ConvertToDTOS {
         Set<TagDTO> tags = item.getTags().stream()
                 .map(tag -> new TagDTO(tag.getName()))
                 .collect(Collectors.toSet());
-        return new ItemDTO(item.getId(), tags, item.getCollection().getId(), item.getName(), item.getImageUrl(), item.getCreatedAt(), item.getCustomFields());
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setId(item.getId());
+        itemDTO.setName(item.getName());
+        itemDTO.setTags(tags);
+        itemDTO.setCreatedAt(item.getCreatedAt());
+        itemDTO.setCustomFields(item.getCustomFields());
+        itemDTO.setImageUrl(item.getImageUrl());
+        itemDTO.setCollectionId(item.getCollection().getId());
+        itemDTO.setCreatorName(item.getCollection().getUser().getName());
+        itemDTO.setCollectionName(item.getCollection().getName());
+        return itemDTO;
     }
 }

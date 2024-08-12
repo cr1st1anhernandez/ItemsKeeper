@@ -35,7 +35,6 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/items/{itemId}/comments/**").permitAll()
                                 .anyRequest().authenticated()
-                                .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
                         sessionManager
