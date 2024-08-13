@@ -1,8 +1,6 @@
 package com.cr1st1an.itemskeeper.backend.utils;
 
-import com.cr1st1an.itemskeeper.backend.persistence.entities.Collection;
-import com.cr1st1an.itemskeeper.backend.persistence.entities.Item;
-import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
+import com.cr1st1an.itemskeeper.backend.persistence.entities.*;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.*;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +20,10 @@ public class ConvertToDTOS {
         return userDTO;
     }
 
+    public CategoryDTO convertCategoryToDTO(Category category) {
+        return new CategoryDTO(category.getName());
+    }
+
     public CollectionDTO convertCollectionToDTO(Collection collection) {
         String categoryName = collection.getCategory() != null ? collection.getCategory().getName() : null;
         CollectionDTO collectionDTO = new CollectionDTO();
@@ -34,6 +36,10 @@ public class ConvertToDTOS {
         collectionDTO.setItemCount(collection.getItems().size());
         collectionDTO.setCreatorName(collection.getUser().getName());
         return collectionDTO;
+    }
+
+    public TagDTO convertTagToDTO(Tag tag) {
+        return new TagDTO(tag.getName());
     }
 
     public ItemDTO convertItemToDTO(Item item) {
