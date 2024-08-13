@@ -13,6 +13,7 @@ module.exports = {
   darkMode: 'class',
   darkMode: 'class',
   plugins: [
+    require('tailwindcss-animated'),
     nextui({
       themes: {
         'orange-dark': {

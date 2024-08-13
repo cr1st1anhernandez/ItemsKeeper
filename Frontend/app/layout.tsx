@@ -33,12 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head />
       <body
         className={clsx(
-          'min-h-[100dvh] bg-background antialiased orange-light dark:orange-dark',
+          'h-full min-h-[100dvh] bg-background antialiased orange-light dark:orange-dark',
           fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
-          <div className="flex h-[100dvh] min-h-[100dvh] w-full flex-col">
+          <div className="flex h-full min-h-[100dvh] w-full flex-col">
             <Navbar />
             <div className="flex h-full w-full">
               <SideBar />
