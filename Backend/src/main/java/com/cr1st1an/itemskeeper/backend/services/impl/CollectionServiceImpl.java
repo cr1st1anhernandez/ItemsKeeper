@@ -5,7 +5,6 @@ import com.cr1st1an.itemskeeper.backend.persistence.respositories.CategoryReposi
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.CollectionRepository;
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICollectionService;
-import com.cr1st1an.itemskeeper.backend.services.models.dtos.CategoryDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,7 @@ public class CollectionServiceImpl implements ICollectionService {
     @Transactional
     public CollectionDTO createCollection(CollectionDTO collectionDTO) {
         User user = userRepository.findById(collectionDTO.getUserId()).orElse(null);
-        CategoryDTO categoryDTO = collectionDTO.getCategory();
-        Category category = categoryRepository.findByName(categoryDTO.getName()).orElse(null);
+        Category category = categoryRepository.findByName(collectionDTO.getCategory()).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
         } else if (category == null) {
@@ -87,13 +85,12 @@ public class CollectionServiceImpl implements ICollectionService {
     @Transactional
     public CollectionDTO updateCollection(Long collectionId, CollectionDTO collectionDTO) {
         Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new RuntimeException("Collection not found"));
-        CategoryDTO categoryDTO = collectionDTO.getCategory();
-        Category category = categoryRepository.findByName(categoryDTO.getName()).orElse(null);
+        Category category = categoryRepository.findByName(collectionDTO.getCategory()).orElse(null);
         if (category == null) {
             throw new RuntimeException("Category not found");
         } else if (!collectionDTO.getUserId().equals(collection.getUser().getId())) {
             throw new RuntimeException("User not found");
-        } else if (!collectionDTO.getCategory().getName().equals(collection.getCategory().getName())) {
+        } else if (!collectionDTO.getCategory().equals(collection.getCategory().getName())) {
             throw new RuntimeException("Category not found");
         }
         collection.setName(collectionDTO.getName());

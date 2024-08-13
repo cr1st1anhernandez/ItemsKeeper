@@ -24,12 +24,11 @@ public class ConvertToDTOS {
 
     public CollectionDTO convertCollectionToDTO(Collection collection) {
         String categoryName = collection.getCategory() != null ? collection.getCategory().getName() : null;
-        CategoryDTO categoryDTO = new CategoryDTO(categoryName);
         CollectionDTO collectionDTO = new CollectionDTO();
         collectionDTO.setId(collection.getId());
         collectionDTO.setName(collection.getName());
         collectionDTO.setDescription(collection.getDescription());
-        collectionDTO.setCategory(categoryDTO);
+        collectionDTO.setCategory(categoryName);
         collectionDTO.setImageUrl(collection.getImageUrl());
         collectionDTO.setUserId(collection.getUser().getId());
         collectionDTO.setItemCount(collection.getItems().size());
