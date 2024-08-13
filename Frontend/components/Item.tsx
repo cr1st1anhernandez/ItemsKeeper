@@ -1,17 +1,10 @@
 'use client';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Item } from '@/types';
-import { Button, Chip, Image, Tooltip } from '@nextui-org/react';
-import { BoxIcon, HeartIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Chip, Image } from '@nextui-org/react';
+import { BoxIcon } from 'lucide-react';
 
 export const ItemComponent = (item: Item) => {
-  const [heartIconColor, setHeartIconColor] = useState<'orange' | 'black'>('black');
-
-  const handleHeartClick = () => {
-    setHeartIconColor(heartIconColor === 'black' ? 'orange' : 'black');
-  };
-
   return (
     <Card
       className="flex w-full max-w-[20rem] transform flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"

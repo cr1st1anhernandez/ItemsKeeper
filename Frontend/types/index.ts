@@ -14,13 +14,17 @@ export type Collection = {
   name: string;
   creatorName: string;
   description: string;
-  category: string;
+  category: Category;
   imageUrl: string;
   userId: number;
   itemCount: number;
 };
 
 export type Tag = {
+  name: string;
+};
+
+export type Category = {
   name: string;
 };
 
