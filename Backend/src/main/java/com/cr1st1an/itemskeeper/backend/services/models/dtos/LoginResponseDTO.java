@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResponseDTO {
     private String jwt;
-    private Long userId;
+    private UserDTO user;
     private String error;
+    private Integer numOfErrors;
 }

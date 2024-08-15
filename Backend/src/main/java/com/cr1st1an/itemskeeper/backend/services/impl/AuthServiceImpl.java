@@ -10,6 +10,7 @@ import com.cr1st1an.itemskeeper.backend.services.models.validations.UserValidati
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
 import com.cr1st1an.itemskeeper.backend.services.IAuthService;
 import com.cr1st1an.itemskeeper.backend.services.IJWTUtilityService;
+import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,9 +25,11 @@ public class AuthServiceImpl implements IAuthService {
     private final IJWTUtilityService jwtUtilityService;
     private final UserValidations userValidations;
     private final RoleRepository roleRepository;
+    private final ConvertToDTOS convertToDTOS;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, IJWTUtilityService jwtUtilityService, UserValidations userValidations, RoleRepository roleRepository) {
+    public AuthServiceImpl(UserRepository userRepository, IJWTUtilityService jwtUtilityService, UserValidations userValidations, RoleRepository roleRepository, ConvertToDTOS convertToDTOS) {
+        this.convertToDTOS = convertToDTOS;
         this.userRepository = userRepository;
         this.jwtUtilityService = jwtUtilityService;
         this.userValidations = userValidations;
@@ -34,6 +37,7 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
+    @Transactional
     public LoginResponseDTO login(LoginDTO loginRequest) throws Exception {
         try {
             LoginResponseDTO responseDTO = new LoginResponseDTO();
@@ -41,19 +45,22 @@ public class AuthServiceImpl implements IAuthService {
 
             if (user.isEmpty()) {
                 responseDTO.setError("User not registered!");
+                responseDTO.setNumOfErrors(1);
                 return responseDTO;
             }
-            Long userId = user.get().getId();
             Optional<Boolean> isUserBlocked = userRepository.isUserBlocked(user.get().getId());
             if (isUserBlocked.orElse(false)) {
                 responseDTO.setError("User is blocked!");
+                responseDTO.setNumOfErrors(1);
                 return responseDTO;
             }
             if (verifyPassword(loginRequest.getPassword(), user.get().getPassword())) {
                 responseDTO.setJwt(jwtUtilityService.generateJWT(user.get().getId()));
-                responseDTO.setUserId(user.get().getId());
+                responseDTO.setUser(convertToDTOS.convertUserToDTO(user.get()));
                 responseDTO.setError(null);
+                responseDTO.setNumOfErrors(0);
             } else {
+                responseDTO.setNumOfErrors(1);
                 responseDTO.setError("Invalid Credentials!");
             }
             return responseDTO;
@@ -72,19 +79,21 @@ public class AuthServiceImpl implements IAuthService {
         try {
             ResponseDTO response = userValidations.validate(user);
 
-            if (response.getNumOfErrors() > 0){
+            if (response.getNumOfErrors() > 0) {
                 return response;
             }
 
             Optional<User> existingUserByName = userRepository.findByName(user.getName());
             if (existingUserByName.isPresent()) {
                 response.setMessage("User already exists!");
+                response.setNumOfErrors(1);
                 return response;
             }
 
             Optional<User> existingUserByEmail = userRepository.findByEmail(user.getEmail());
             if (existingUserByEmail.isPresent()) {
                 response.setMessage("Email already register!");
+                response.setNumOfErrors(1);
                 return response;
             }
 

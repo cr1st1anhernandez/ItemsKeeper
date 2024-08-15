@@ -31,10 +31,6 @@ public class AuthController {
     @PostMapping("/login")
     private ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginRequest) throws Exception {
         LoginResponseDTO login = authService.login(loginRequest);
-        if (StringUtils.hasText(login.getJwt())) {
-            return new ResponseEntity<>(login, HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(login, HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(login, HttpStatus.OK);
     }
 }
