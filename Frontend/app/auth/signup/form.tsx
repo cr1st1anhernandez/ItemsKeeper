@@ -5,13 +5,31 @@ import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
 import { Input } from '@nextui-org/input';
 import { UserIcon, MailIcon, EyeOffIcon, EyeIcon } from 'lucide-react';
-import { useState } from 'react';
-import { useFormState } from 'react-dom';
+import { useEffect, useState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
+
+function Submit(): JSX.Element {
+  const status = useFormStatus();
+
+  return (
+    <Button
+      className="mt-6"
+      color="primary"
+      size="lg"
+      isLoading={status.pending}
+      disabled={status.pending}
+      type="submit"
+    >
+      {status.pending ? 'Submitting...' : 'Sign Up'}
+    </Button>
+  );
+}
 
 export function SignUpForm() {
-  const [state, action, pending] = useFormState(signup, undefined);
+  const [state, action] = useFormState(signup, undefined);
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+
   return (
     <Card className="w-full p-4 md:w-96 md:p-8">
       <CardHeader className="flex items-center justify-center">
@@ -69,16 +87,8 @@ export function SignUpForm() {
             label="Password"
           />
           {state?.errors?.password && <p className="text-rose-500">{state.errors.password}</p>}
-          <Button
-            className="mt-6"
-            color="primary"
-            size="lg"
-            isLoading={pending}
-            disabled={pending}
-            type="submit"
-          >
-            {pending ? 'Submitting...' : 'Sign Up'}
-          </Button>
+          {state?.message && <p className="text-rose-500">{state.message}</p>}
+          <Submit />
         </form>
       </CardBody>
       <CardFooter>

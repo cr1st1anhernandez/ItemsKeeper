@@ -1,11 +1,9 @@
 'use server';
-import { SigninFormSchema } from '@/app/_lib/definitions';
+import { SigninFormSchema, backendUrl } from '@/app/_lib/definitions';
 import { createSession } from '@/app/_lib/session';
 import axios from 'axios';
 
-const url = 'http://localhost:8080/api/v1/';
-
-export async function signin(state: any, formData: FormData) {
+export async function login(state: any, formData: FormData) {
   const validationResult = SigninFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -16,9 +14,19 @@ export async function signin(state: any, formData: FormData) {
     };
   }
   const { email, password } = validationResult.data;
-  const response = await axios.post(`${url}auth/login`, {
+  const response = await axios.post(`${backendUrl}auth/login`, {
     email,
     password,
   });
-  createSession(response.data.jwt, response.data.userId);
+  if (response.status === 200) {
+    if (response.data.numOfErrors === 0) {
+      await createSession(response.data.jwt, response.data.user);
+      return { success: true };
+    } else {
+      return {
+        message: response.data.error,
+      };
+    }
+  }
+  return { success: false, message: 'Login failed' };
 }

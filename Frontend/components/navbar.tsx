@@ -1,3 +1,8 @@
+'use client';
+import { logout } from '@/app/auth/actions';
+import { useAuth } from '@/components/AuthProvider';
+import { ThemeSwitch } from '@/components/theme-switch';
+import { siteConfig } from '@/config/site';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 import {
@@ -11,11 +16,16 @@ import {
 } from '@nextui-org/navbar';
 import { VaultIcon } from 'lucide-react';
 import NextLink from 'next/link';
+import { useCallback } from 'react';
 
-import { ThemeSwitch } from '@/components/theme-switch';
-import { siteConfig } from '@/config/site';
+export default function Navbar() {
+  const { user, setUser } = useAuth();
+  const isAuthenticated = !!user;
+  const handleLogout = useCallback(async () => {
+    await logout();
+    setUser(null);
+  }, []);
 
-export const Navbar = () => {
   return (
     <NextUINavbar maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -26,27 +36,44 @@ export const Navbar = () => {
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
+
       <NavbarContent className="hidden basis-1/5 sm:flex sm:basis-full" justify="end">
         <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden gap-2 sm:flex">
-          <Button as={Link} color="primary" href="/auth/login">
-            Log In
-          </Button>
-        </NavbarItem>
-        <NavbarItem className="hidden gap-2 sm:flex">
-          <Button as={Link} color="primary" href="/auth/signup" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {isAuthenticated ? (
+          <NavbarItem className="hidden gap-2 sm:flex">
+            <Button color="danger" variant="flat" onClick={handleLogout}>
+              Log Out
+            </Button>
+          </NavbarItem>
+        ) : (
+          <>
+            <NavbarItem className="hidden gap-2 sm:flex">
+              <Button as={Link} color="primary" href="/auth/login">
+                Log In
+              </Button>
+            </NavbarItem>
+            <NavbarItem className="hidden gap-2 sm:flex">
+              <Button as={Link} color="primary" href="/auth/signup" variant="flat">
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
         <ThemeSwitch />
-        <Button as={Link} color="primary" href="/auth/login">
-          Log In
-        </Button>
+        {isAuthenticated ? (
+          <Button color="danger" variant="flat" onClick={handleLogout}>
+            Log Out
+          </Button>
+        ) : (
+          <Button as={Link} color="primary" href="/auth/login">
+            Log In
+          </Button>
+        )}
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -73,4 +100,4 @@ export const Navbar = () => {
       </NavbarMenu>
     </NextUINavbar>
   );
-};
+}

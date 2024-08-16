@@ -22,3 +22,5 @@ export const SigninFormSchema = z.object({
       'Password must contain at least one uppercase letter and one special character',
     ),
 });
+
+export const backendUrl = 'http://localhost:8080/api/v1/';

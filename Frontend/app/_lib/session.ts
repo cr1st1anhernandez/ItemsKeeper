@@ -1,47 +1,39 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
+import { User } from '@/types';
 
 const cookieConfig = {
   name: 'session',
   options: { httpOnly: true, secure: true, sameSite: 'lax' as 'lax', path: '/' },
-  duration: 60 * 60 * 24 * 14,
 };
 
-export async function createSession(jwt: string, userId: number) {
-  const expires = new Date(Date.now() + cookieConfig.duration * 1000);
-  const session = JSON.stringify({ jwt, userId, expires });
+export async function createSession(jwt: string, user: User) {
+  const decodedToken = jwtDecode(jwt) as { exp: number };
+  const expires = new Date(decodedToken.exp * 1000);
 
-  cookies().set(cookieConfig.name, session, { ...cookieConfig.options, expires });
-  redirect('/');
+  cookies().set(cookieConfig.name, JSON.stringify({ jwt, user }), {
+    ...cookieConfig.options,
+    expires,
+  });
 }
 
-export async function verifySession() {
-  const sessionCookie = cookies().get(cookieConfig.name)?.value;
+export const verifySession = async () => {
+  const cookie = cookies().get(cookieConfig.name)?.value;
+  const session = cookie ? JSON.parse(cookie) : undefined;
 
-  if (!sessionCookie) {
+  if (!session?.user?.id || !session?.jwt) {
+    redirect('/');
+  }
+  const decodedToken = jwtDecode(session.jwt) as { exp: number };
+  if (decodedToken.exp * 1000 < Date.now()) {
+    deleteSession();
     redirect('/auth/login');
   }
-
-  const session = JSON.parse(sessionCookie);
-
-  if (!session?.jwt || !session?.userId) {
-    redirect('/auth/login');
-  }
-
-  try {
-    const decoded = jwt.decode(session.jwt) as jwt.JwtPayload;
-    if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-      redirect('/auth/login');
-    }
-    return { userId: session.userId };
-  } catch (error) {
-    redirect('/auth/login');
-  }
-}
+  return { isAuth: true, user: session.user };
+};
 
 export async function deleteSession() {
   cookies().delete(cookieConfig.name);
-  redirect('/auth/login');
 }

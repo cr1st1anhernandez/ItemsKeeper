@@ -43,3 +43,10 @@ export type Item = {
   createdAt: string;
   customFields: CustomFields;
 };
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+};
