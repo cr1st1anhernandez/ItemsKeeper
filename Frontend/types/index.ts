@@ -14,7 +14,7 @@ export type Collection = {
   name: string;
   creatorName: string;
   description: string;
-  category: Category;
+  category: string;
   imageUrl: string;
   userId: number;
   itemCount: number;
@@ -49,4 +49,5 @@ export type User = {
   name: string;
   email: string;
   role: string;
+  jwt: string;
 };

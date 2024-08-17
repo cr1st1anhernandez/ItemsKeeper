@@ -1,11 +1,6 @@
 'use client';
 import { CollectionComponent } from '@/components/collection';
 import { Collection } from '@/types';
-import { ChevronLeftIcon, ChevronRightIcon, LayersIcon, TableIcon, TrophyIcon } from 'lucide-react';
-import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import {
   Card,
   CardBody,
@@ -22,6 +17,11 @@ import {
   Tabs,
   getKeyValue,
 } from '@nextui-org/react';
+import axios from 'axios';
+import { ChevronLeftIcon, ChevronRightIcon, LayersIcon, TableIcon, TrophyIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const columns = [
   { key: 'name', label: 'Name' },
@@ -77,7 +77,7 @@ export const TopCollections = () => {
   const rows = collections.map((collection) => ({
     key: collection.id,
     name: collection.name,
-    category: collection.category.name,
+    category: collection.category,
     description: collection.description,
     image_url: collection.imageUrl,
   }));

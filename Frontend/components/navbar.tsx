@@ -29,8 +29,8 @@ export default function Navbar() {
   return (
     <NextUINavbar maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand as="li" className="max-w-fit md:pl-2">
-          <NextLink className="flex items-center justify-start gap-2 md:gap-8" href="/">
+        <NavbarBrand as="li" className="max-w-fit">
+          <NextLink className="flex items-center justify-start gap-2" href="/">
             <VaultIcon size={32} className="text-2xl text-orange-400" />
             <p className="font-bold text-inherit">ITEMS KEEPER</p>
           </NextLink>

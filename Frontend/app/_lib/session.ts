@@ -1,8 +1,8 @@
-import 'server-only';
+import { User } from '@/types';
+import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
-import { User } from '@/types';
+import 'server-only';
 
 const cookieConfig = {
   name: 'session',
@@ -13,7 +13,14 @@ export async function createSession(jwt: string, user: User) {
   const decodedToken = jwtDecode(jwt) as { exp: number };
   const expires = new Date(decodedToken.exp * 1000);
 
-  cookies().set(cookieConfig.name, JSON.stringify({ jwt, user }), {
+  const sessionData = {
+    user: {
+      ...user,
+      jwt,
+    },
+  };
+
+  cookies().set(cookieConfig.name, JSON.stringify(sessionData), {
     ...cookieConfig.options,
     expires,
   });
@@ -23,10 +30,10 @@ export const verifySession = async () => {
   const cookie = cookies().get(cookieConfig.name)?.value;
   const session = cookie ? JSON.parse(cookie) : undefined;
 
-  if (!session?.user?.id || !session?.jwt) {
+  if (!session?.user?.id || !session?.user?.jwt) {
     redirect('/');
   }
-  const decodedToken = jwtDecode(session.jwt) as { exp: number };
+  const decodedToken = jwtDecode(session.user.jwt) as { exp: number };
   if (decodedToken.exp * 1000 < Date.now()) {
     deleteSession();
     redirect('/auth/login');

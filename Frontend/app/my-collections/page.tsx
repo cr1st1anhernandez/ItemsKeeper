@@ -1,8 +1,12 @@
+import { MyCollections } from '@/components/myCollections';
+
 export default function Page() {
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold">My collections</h1>
-      <p className="mt-4 text-lg">This is a protected route.</p>
+    <div className="flex flex-col">
+      <header className="flex items-center gap-6">
+        <h2 className="text-2xl font-semibold md:text-4xl lg:text-3xl">My collections</h2>
+      </header>
+      <MyCollections />
     </div>
   );
 }

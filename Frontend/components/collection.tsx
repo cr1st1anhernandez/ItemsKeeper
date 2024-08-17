@@ -1,6 +1,6 @@
 'use client';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Collection } from '@/types';
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Image, Tooltip } from '@nextui-org/react';
 
 export const CollectionComponent = (collection: Collection) => {

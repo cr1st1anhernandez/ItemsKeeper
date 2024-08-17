@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Button, Link, Skeleton } from '@nextui-org/react';
-import { SparklesIcon } from 'lucide-react';
 import { Category } from '@/types';
+import { Button, Link, Skeleton } from '@nextui-org/react';
 import axios from 'axios';
+import { SparklesIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);

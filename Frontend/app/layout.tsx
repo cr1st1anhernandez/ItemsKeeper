@@ -4,10 +4,11 @@ import { Metadata, Viewport } from 'next';
 
 import { Providers } from './providers';
 
+import { Dock } from '@/components/Dock';
 import Navbar from '@/components/navbar';
+import { SideBar } from '@/components/sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
-import { SideBar } from '@/components/sidebar';
 
 export const metadata: Metadata = {
   title: {
@@ -33,18 +34,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head />
       <body
         className={clsx(
-          'h-full min-h-[100dvh] bg-background antialiased orange-light dark:orange-dark',
+          'relative min-h-[100dvh] bg-background antialiased orange-light dark:orange-dark',
           fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
-          <div className="flex h-full min-h-[100dvh] w-full flex-col">
-            <Navbar />
-            <div className="flex h-full w-full">
-              <SideBar />
-              <main className="h-full w-full px-6">{children}</main>
+          <div className="relative flex min-h-[100dvh] w-full">
+            <SideBar />
+            <div className="flex min-h-[100dvh] w-full flex-col">
+              <Navbar />
+              <main className="min-h-[100dvh] w-full px-6">{children}</main>
             </div>
           </div>
+          <Dock />
         </Providers>
       </body>
     </html>

@@ -1,9 +1,9 @@
+import { Categories } from '@/components/categories';
 import { RecentItems } from '@/components/recentItems';
 import { TopCollections } from '@/components/topCollections';
-import { Categories } from '@/components/categories';
 export default async function HomePage() {
   return (
-    <section className="h-fit w-full py-8 md:py-10">
+    <section className="h-fit w-full">
       <div className="flex h-fit w-full flex-col gap-8">
         <Categories />
         <TopCollections />
