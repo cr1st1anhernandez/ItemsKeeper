@@ -1,11 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { AuthProvider } from '@/components/AuthProvider';
+import { CategoryProvider } from '@/contexts/CategoryContext';
 import { NextUIProvider } from '@nextui-org/system';
-import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ThemeProviderProps } from 'next-themes/dist/types';
-import { AuthProvider } from '@/components/AuthProvider';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -18,7 +19,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   return (
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <CategoryProvider>{children}</CategoryProvider>
+        </AuthProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );
