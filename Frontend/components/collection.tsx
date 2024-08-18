@@ -1,42 +1,153 @@
 'use client';
-import { Collection } from '@/types';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Image, Tooltip } from '@nextui-org/react';
+import { backendUrl } from '@/app/_lib/definitions';
+import { useAuth } from '@/components/AuthProvider';
+import { ItemComponent } from '@/components/Item';
+import { ItemSkeleton } from '@/components/itemSkeleton';
+import { Collection, Item } from '@/types';
+import {
+  Skeleton,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tabs,
+  getKeyValue,
+} from '@nextui-org/react';
+import axios from 'axios';
+import { ClockIcon, TableIcon } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export const CollectionComponent = (collection: Collection) => {
+const columns = [
+  { key: 'name', label: 'Name' },
+  { key: 'tags', label: 'Tags' },
+  { key: 'image_url', label: 'Image' },
+  { key: 'customFields', label: 'Custom Fields' },
+];
+
+export const CollectionComponent = () => {
+  const { user } = useAuth();
+  const jwt = user?.jwt;
+  const params = useParams<{ collectionId: string }>();
+  const collectionId = parseInt(params.collectionId);
+
+  const [collection, setCollection] = useState<Collection | null>(null);
+  const [items, setItems] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState({ collection: true, items: true });
+
+  const fetchData = async (
+    url: string,
+    setData: React.Dispatch<any>,
+    dataType: 'collection' | 'items',
+  ) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      };
+
+      const { data } = await axios.get(url, config);
+      setData(data);
+      console.log(`Fetched ${dataType}:`, data);
+    } catch (error) {
+      console.error(`Error fetching ${dataType}:`, error);
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [dataType]: false }));
+    }
+  };
+
+  useEffect(() => {
+    console.log('Fetching collection:', collectionId);
+    const fetchCollections = async () => {
+      await fetchData(`${backendUrl}collections/${collectionId}`, setCollection, 'collection');
+      fetchItems();
+    };
+
+    const fetchItems = async () => {
+      await fetchData(`${backendUrl}collections/${collectionId}/items`, setItems, 'items');
+    };
+
+    fetchCollections();
+  }, []);
+
+  const rows = items.map((item) => ({
+    key: item.id,
+    name: item.name,
+    tags: item.tags.map((tag) => tag.name).join(', '),
+    image_url: item.imageUrl,
+    customFields: JSON.stringify(item.customFields),
+  }));
   return (
-    <Card
-      className="flex w-full max-w-[20rem] transform flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"
-      isPressable
-      onPress={() => console.log('item pressed')}
-    >
-      <CardHeader className="flex-col items-start">
-        <div className="flex w-full items-center justify-between">
-          <p className="text-md inline-block bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text font-bold uppercase text-transparent">
-            {collection.category}
+    <div className="my-8 flex w-full flex-col gap-8 text-pretty">
+      {isLoading.collection ? (
+        <>
+          <Skeleton className="w-1/2 rounded-lg">
+            <div className="h-14 rounded-lg bg-default-300"></div>
+          </Skeleton>
+          <Skeleton className="w-1/4 rounded-lg">
+            <div className="h-8 rounded-lg bg-default-300"></div>
+          </Skeleton>
+          <Skeleton className="w-1/12 rounded-lg">
+            <div className="h-6 rounded-lg bg-default-300"></div>
+          </Skeleton>
+        </>
+      ) : (
+        <>
+          <h1 className="text-2xl font-bold md:text-4xl lg:text-5xl">{collection?.name}</h1>
+          <p className="text-lg font-semibold opacity-70 md:text-xl">{collection?.description}</p>
+          <p className="text-lg font-semibold opacity-40 md:text-xl">
+            Created by {collection?.creatorName}
           </p>
-          <Tooltip content="Number of Items" closeDelay={0}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-zinc-600">
-              <span className="text-xs font-semibold">{collection.itemCount}</span>
+        </>
+      )}
+      <div className="relative">
+        <p className="absolute left-32 top-2 font-semibold opacity-80">
+          {collection?.itemCount} items
+        </p>
+        <Tabs aria-label="Options">
+          <Tab key="Items" title={<ClockIcon />}>
+            <div className="flex flex-wrap gap-8">
+              {isLoading.items
+                ? Array.from({ length: 15 }).map((_, index) => <ItemSkeleton key={index} />)
+                : items.map((item, index) => <ItemComponent key={index} {...item} />)}
             </div>
-          </Tooltip>
-        </div>
-      </CardHeader>
-      <CardBody className="w-full overflow-visible">
-        <Image
-          alt="Card background"
-          className="h-[12rem] w-[20rem] rounded-xl object-cover"
-          src={collection.imageUrl}
-        />
-      </CardBody>
-      <CardFooter className="flex flex-col items-start justify-start gap-2 text-pretty text-left">
-        <h4 className="text-3xl font-bold">{collection.name}</h4>
-        <p className="text-sm font-semibold uppercase opacity-70">{collection.description}</p>
-        <div className="flex w-full flex-col items-end text-pretty">
-          <h4 className="text-sm font-semibold uppercase text-orange-400">Created by</h4>
-          <p className="text-sm font-semibold opacity-90">{collection.creatorName}</p>
-        </div>
-      </CardFooter>
-    </Card>
+          </Tab>
+          <Tab key="TableItems" title={<TableIcon />}>
+            <Table aria-label="Table of recent items">
+              <TableHeader columns={columns}>
+                {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+              </TableHeader>
+              <TableBody items={rows}>
+                {(item) => (
+                  <TableRow key={item.key}>
+                    {(columnKey) => {
+                      const value = getKeyValue(item, columnKey);
+                      if (columnKey === 'image_url') {
+                        return (
+                          <TableCell>
+                            <img
+                              src={value}
+                              alt="Item Thumbnail"
+                              className="h-12 w-20 rounded-sm object-cover"
+                            />
+                          </TableCell>
+                        );
+                      }
+                      return <TableCell>{value}</TableCell>;
+                    }}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Tab>
+        </Tabs>
+      </div>
+    </div>
   );
 };

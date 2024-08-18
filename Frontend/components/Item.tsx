@@ -1,6 +1,6 @@
 'use client';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Item } from '@/types';
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Chip, Image } from '@nextui-org/react';
 import { BoxIcon } from 'lucide-react';
 

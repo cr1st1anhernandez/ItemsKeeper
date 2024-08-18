@@ -1,16 +1,8 @@
 'use client';
+import { ItemComponent } from '@/components/Item';
+import { ItemSkeleton } from '@/components/itemSkeleton';
 import { Item } from '@/types';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, TableIcon } from 'lucide-react';
-import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Skeleton,
   Tab,
   Table,
   TableBody,
@@ -21,7 +13,11 @@ import {
   Tabs,
   getKeyValue,
 } from '@nextui-org/react';
-import { ItemComponent } from '@/components/Item';
+import axios from 'axios';
+import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, TableIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const columns = [
   { key: 'name', label: 'Name' },
@@ -59,26 +55,7 @@ export const RecentItems = () => {
 
   const skeletonSlides = Array.from({ length: 5 }).map((_, index) => (
     <SwiperSlide key={index} className="p-4">
-      <Card className="flex w-full max-w-[20rem] flex-col items-start justify-start p-4 text-left">
-        <CardHeader className="flex-col items-start">
-          <Skeleton className="w-full rounded-lg">
-            <div className="h-5 w-3/5 rounded-lg bg-default-200"></div>
-          </Skeleton>
-        </CardHeader>
-        <CardBody className="w-full overflow-visible">
-          <Skeleton className="rounded-lg">
-            <div className="h-[12rem] w-[20rem] rounded-xl bg-default-300"></div>
-          </Skeleton>
-        </CardBody>
-        <CardFooter className="flex flex-col items-start justify-start gap-2 text-left">
-          <Skeleton className="w-4/5 rounded-lg">
-            <div className="h-14 w-4/5 rounded-lg bg-default-200"></div>
-          </Skeleton>
-          <Skeleton className="w-3/5 rounded-lg">
-            <div className="h-4 w-3/5 rounded-lg bg-default-200"></div>
-          </Skeleton>
-        </CardFooter>
-      </Card>
+      <ItemSkeleton />
     </SwiperSlide>
   ));
 

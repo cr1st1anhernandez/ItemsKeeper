@@ -2,7 +2,7 @@
 
 import { backendUrl } from '@/app/_lib/definitions';
 import { useAuth } from '@/components/AuthProvider';
-import { CollectionComponent } from '@/components/collection';
+import { CollectionCard } from '@/components/collectionCard';
 import { Collection } from '@/types';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Skeleton } from '@nextui-org/react';
@@ -67,7 +67,7 @@ export const MyCollections = () => {
                 </Card>
               ))
             : collections.map((collection, index) => (
-                <CollectionComponent key={index} {...collection} />
+                <CollectionCard key={index} {...collection} />
               ))}
         </div>
       </div>
