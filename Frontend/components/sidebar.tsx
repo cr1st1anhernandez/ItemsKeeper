@@ -1,6 +1,6 @@
 'use client';
 import { useAuth } from '@/components/AuthProvider';
-import NewCollection from '@/components/newCollection';
+import { AddCollection } from '@/components/addCollection';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 import { Tooltip } from '@nextui-org/react';
@@ -59,7 +59,7 @@ export function SideBar() {
             </Button>
           </Tooltip>
         ))}
-      {isAuthenticated && <NewCollection />}
+      {isAuthenticated && <AddCollection />}
     </aside>
   );
 }

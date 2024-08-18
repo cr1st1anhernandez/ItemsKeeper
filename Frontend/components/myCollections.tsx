@@ -7,7 +7,6 @@ import { Collection } from '@/types';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Skeleton } from '@nextui-org/react';
 import axios from 'axios';
-import { PlusIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export const MyCollections = () => {
@@ -41,16 +40,6 @@ export const MyCollections = () => {
     <section className="h-fit w-full py-8 md:py-10">
       <div className="flex h-fit w-full flex-col gap-8">
         <div className="flex flex-wrap gap-8">
-          <Card
-            className="grid w-full max-w-[20rem] transform flex-col place-items-center p-4 text-center shadow-none outline-2 outline-orange-400 transition hover:scale-105 dark:shadow-lg"
-            isPressable
-          >
-            <CardBody className="flex h-full w-full flex-col items-center justify-center">
-              <PlusIcon size={64} className="text-orange-400" />
-              <p className="mt-2 text-lg font-bold text-orange-400">Add Collection</p>
-            </CardBody>
-          </Card>
-
           {isLoading
             ? Array.from({ length: 16 }).map((_, index) => (
                 <Card

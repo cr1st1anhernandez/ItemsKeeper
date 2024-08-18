@@ -10,14 +10,14 @@ export type Register = {
 };
 
 export type Collection = {
-  id: number;
+  id?: number;
   name: string;
-  creatorName: string;
+  creatorName?: string;
   description: string;
   category: string;
   imageUrl: string;
-  userId: number;
-  itemCount: number;
+  userId?: number;
+  itemCount?: number;
 };
 
 export type Tag = {
@@ -51,3 +51,12 @@ export type User = {
   role: string;
   jwt: string;
 };
+
+export interface File {
+  uuid: string;
+  status: string;
+  fileInfo: {
+    originalFilename: string;
+  };
+  cdnUrl: string;
+}

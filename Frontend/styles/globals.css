@@ -5,3 +5,8 @@
 * {
   font-family: 'Poppins', sans-serif;
 }
+
+.my-config {
+  --uc-primary-oklch-dark: 69% 0.1768 51.88;
+  --uc-primary-oklch-light: 59% 0.1724 51.88;
+}

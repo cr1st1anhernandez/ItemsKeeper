@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@uploadcare/react-uploader/core.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 

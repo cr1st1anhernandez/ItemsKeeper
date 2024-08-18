@@ -1,14 +1,14 @@
 'use client';
 
 import { useAuth } from '@/components/AuthProvider';
-import NewCollection from '@/components/newCollection';
+import { AddCollection } from '@/components/addCollection';
 import { Button, Link, Tooltip } from '@nextui-org/react';
 import { FolderIcon, HeartIcon, HomeIcon, KeySquare, SettingsIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export const Dock = () => {
   const pathname = usePathname();
-  const user = useAuth().user;
+  const { user } = useAuth();
   const isAuthenticated = !!user;
   const isAdministator = user?.role === 'ADMIN';
 
@@ -57,7 +57,7 @@ export const Dock = () => {
             </Button>
           </Tooltip>
         ))}
-      {isAuthenticated && <NewCollection />}
+      {isAuthenticated && <AddCollection />}
     </div>
   );
 };
