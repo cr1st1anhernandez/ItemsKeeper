@@ -6,7 +6,7 @@ import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginResponseDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.ResponseDTO;
-import com.cr1st1an.itemskeeper.backend.services.models.validations.UserValidations;
+import com.cr1st1an.itemskeeper.backend.services.models.validations.ObjectsValidations;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
 import com.cr1st1an.itemskeeper.backend.services.IAuthService;
 import com.cr1st1an.itemskeeper.backend.services.IJWTUtilityService;
@@ -23,16 +23,16 @@ public class AuthServiceImpl implements IAuthService {
 
     private final UserRepository userRepository;
     private final IJWTUtilityService jwtUtilityService;
-    private final UserValidations userValidations;
+    private final ObjectsValidations objectsValidations;
     private final RoleRepository roleRepository;
     private final ConvertToDTOS convertToDTOS;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, IJWTUtilityService jwtUtilityService, UserValidations userValidations, RoleRepository roleRepository, ConvertToDTOS convertToDTOS) {
+    public AuthServiceImpl(UserRepository userRepository, IJWTUtilityService jwtUtilityService, ObjectsValidations objectsValidations, RoleRepository roleRepository, ConvertToDTOS convertToDTOS) {
         this.convertToDTOS = convertToDTOS;
         this.userRepository = userRepository;
         this.jwtUtilityService = jwtUtilityService;
-        this.userValidations = userValidations;
+        this.objectsValidations = objectsValidations;
         this.roleRepository = roleRepository;
     }
 
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements IAuthService {
     @Transactional
     public ResponseDTO register(User user) throws Exception {
         try {
-            ResponseDTO response = userValidations.validate(user);
+            ResponseDTO response = objectsValidations.validateUser(user);
 
             if (response.getNumOfErrors() > 0) {
                 return response;

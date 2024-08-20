@@ -3,6 +3,7 @@ package com.cr1st1an.itemskeeper.backend.utils;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.*;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.*;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,11 +18,18 @@ public class ConvertToDTOS {
         userDTO.setEmail(user.getEmail());
         userDTO.setCreatedAt(user.getCreatedAt());
         userDTO.setBlocked(user.isBlocked());
+        userDTO.setRole(user.getRole().getName());
         return userDTO;
     }
 
     public CategoryDTO convertCategoryToDTO(Category category) {
         return new CategoryDTO(category.getName());
+    }
+
+    public List<CollectionDTO> convertCollectionsToDTO(Set<Collection> collections) {
+        return collections.stream()
+                .map(this::convertCollectionToDTO)
+                .collect(Collectors.toList());
     }
 
     public CollectionDTO convertCollectionToDTO(Collection collection) {

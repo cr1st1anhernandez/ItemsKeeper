@@ -22,21 +22,13 @@ public class AdminServiceImpl implements IAdminService {
         this.roleRepository = roleRepository;
     }
 
-    private Optional<User> findUserByName(String username) {
-        return userRepository.findByName(username);
-    }
-
-    private Optional<Role> findRoleByName(String roleName) {
-        return roleRepository.findByName(roleName);
-    }
-
-    public String assignRole(String username, String roleName) {
-        Optional<User> userOptional = findUserByName(username);
+    public String assignRole(Long userId, String roleName) {
+        Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             return "User not found";
         }
 
-        Optional<Role> roleOptional = findRoleByName(roleName);
+        Optional<Role> roleOptional = roleRepository.findByName(roleName);
         if (roleOptional.isEmpty()) {
             return "Role not found";
         }
@@ -49,13 +41,13 @@ public class AdminServiceImpl implements IAdminService {
         return "Role assigned successfully";
     }
 
-    public String removeRole(String username, String roleName) {
-        Optional<User> userOptional = findUserByName(username);
+    public String removeRole(Long userId, String roleName) {
+        Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             return "User not found";
         }
 
-        Optional<Role> roleOptional = findRoleByName(roleName);
+        Optional<Role> roleOptional = roleRepository.findByName(roleName);
         if (roleOptional.isEmpty()) {
             return "Role not found";
         }

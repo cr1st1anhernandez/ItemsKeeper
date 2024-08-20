@@ -83,8 +83,8 @@ public class CollectionServiceImpl implements ICollectionService {
     }
 
     @Transactional
-    public CollectionDTO updateCollection(Long collectionId, CollectionDTO collectionDTO) {
-        Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new RuntimeException("Collection not found"));
+    public CollectionDTO updateCollection(CollectionDTO collectionDTO) {
+        Collection collection = collectionRepository.findById(collectionDTO.getId()).orElseThrow(() -> new RuntimeException("Collection not found"));
         Category category = categoryRepository.findByName(collectionDTO.getCategory()).orElse(null);
         if (category == null) {
             throw new RuntimeException("Category not found");

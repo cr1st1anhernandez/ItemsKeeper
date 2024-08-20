@@ -20,8 +20,12 @@ import java.util.HashMap;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
+    private final IAuthService authService;
+
     @Autowired
-    private IAuthService authService;
+    public AuthController(IAuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/register")
     private ResponseEntity<ResponseDTO> addUser(@RequestBody User user) throws Exception {

@@ -29,10 +29,10 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Transactional
-    public CommentDTO addComment(Long itemId, CommentDTO commentDTO) {
+    public CommentDTO addComment(CommentDTO commentDTO) {
         Long userId = commentDTO.getUserId();
         String text = commentDTO.getText();
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item not found"));
+        Item item = itemRepository.findById(commentDTO.getItemId()).orElseThrow(() -> new RuntimeException("Item not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = new Comment();
         comment.setText(text);
@@ -41,6 +41,11 @@ public class CommentServiceImpl implements ICommentService {
         comment = commentRepository.save(comment);
         return new CommentDTO(comment.getId(), comment.getText(), comment.getUser().getId(), comment.getItem().getId());
 
+    }
+
+     public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+        commentRepository.delete(comment);
     }
 
     @Transactional

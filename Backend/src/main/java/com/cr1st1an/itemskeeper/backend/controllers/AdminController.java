@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 public class AdminController {
 
+    private final AdminServiceImpl adminService;
+
     @Autowired
-    private AdminServiceImpl adminService;
+    public AdminController(AdminServiceImpl adminService) {
+        this.adminService = adminService;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assign-role")
-    public ResponseEntity<?> assignRole(@RequestParam String username, @RequestParam String roleName) {
-        String result = adminService.assignRole(username, roleName);
+    public ResponseEntity<?> assignRole(@RequestParam Long userId, @RequestParam String roleName) {
+        String result = adminService.assignRole(userId, roleName);
         if (result.equals("Role assigned successfully")) {
             return ResponseEntity.ok(result);
         }
@@ -27,8 +31,8 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove-role")
-    public ResponseEntity<?> removeRole(@RequestParam String username, @RequestParam String roleName) {
-        String result = adminService.removeRole(username, roleName);
+    public ResponseEntity<?> removeRole(@RequestParam Long userId, @RequestParam String roleName) {
+        String result = adminService.removeRole(userId, roleName);
         if (result.equals("Role removed successfully")) {
             return ResponseEntity.ok(result);
         }

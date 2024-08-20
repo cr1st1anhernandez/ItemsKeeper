@@ -15,4 +15,5 @@ public class UserDTO {
     private String email;
     private LocalDateTime createdAt;
     private boolean blocked;
+    private String role;
 }

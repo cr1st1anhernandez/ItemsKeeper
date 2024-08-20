@@ -9,6 +9,6 @@ public interface ICollectionService {
     public List<CollectionDTO> getTopCollections();
     public List<CollectionDTO> getAllCollections();
     public Optional<CollectionDTO> getCollectionById(Long collectionId);
-    public CollectionDTO updateCollection(Long collectionId,CollectionDTO collectionDTO);
+    public CollectionDTO updateCollection(CollectionDTO collectionDTO);
     public void deleteCollection(Long collectionId);
 }

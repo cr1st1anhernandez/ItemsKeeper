@@ -14,7 +14,7 @@ public class CollectionDTO {
     private Long id;
 
     @NotBlank(message = "Name is required")
-    @Size(min = 3,max = 50, message = "Name must be less than or equal to 100 characters")
+    @Size(min = 3,max = 50, message = "Name must be less than or equal to 50 characters")
     private String name;
 
     @NotBlank(message = "Description is required")
@@ -22,12 +22,9 @@ public class CollectionDTO {
     private String description;
 
     @NotBlank(message = "Category is required")
-    @Size(max = 50, message = "Category must be less than or equal to 50 characters")
     private String category;
 
-    @NotNull(message = "User ID is required")
     private Long userId;
-
     private int itemCount;
     private String imageUrl;
     private String creatorName;

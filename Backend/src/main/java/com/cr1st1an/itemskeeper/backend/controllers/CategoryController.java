@@ -20,7 +20,7 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public List<CategoryDTO> getAllTags() {
+    public List<CategoryDTO> getAllCategories() {
         return categoryService.getAllCategories();
     }
 }
