@@ -90,13 +90,6 @@ export const Collection = () => {
                     files={files}
                     setFiles={setFiles}
                   />
-                  <div>
-                    {files.map((file) => (
-                      <div className="overflow-hidden rounded-lg" key={file.uuid}>
-                        <img src={file.cdnUrl} alt={file.fileInfo.originalFilename} />
-                      </div>
-                    ))}
-                  </div>
                   <footer className="flex w-full justify-end">
                     <Button
                       isLoading={isLoading}
