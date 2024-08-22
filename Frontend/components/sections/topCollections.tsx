@@ -1,4 +1,5 @@
 'use client';
+import { backendUrl } from '@/app/_lib/definitions';
 import { CollectionCard } from '@/components/cards/collectionCard';
 import { CollectionSkeleton } from '@/components/skeletons/collectionSkeleton';
 import { Collection } from '@/types';
@@ -32,7 +33,7 @@ export const TopCollections = () => {
 
   const fetchCollections = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/v1/collections/top');
+      const { data } = await axios.get(`${backendUrl}collections/top`);
       setCollections(data);
     } catch (error) {
       console.error('Error fetching collections:', error);
