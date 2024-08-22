@@ -1,12 +1,12 @@
 'use client';
 
-import { AuthProvider } from '@/contexts/authContext';
-import { CategoryProvider } from '@/contexts/categoryContext';
 import { NextUIProvider } from '@nextui-org/system';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ThemeProviderProps } from 'next-themes/dist/types';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { AuthProvider } from '../contexts/authContext';
+import { CategoryProvider } from '../contexts/categoryContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
