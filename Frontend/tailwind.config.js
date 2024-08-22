@@ -36,6 +36,10 @@ module.exports = {
               DEFAULT: '#f59e0b',
               foreground: '#fff',
             },
+            danger: {
+              DEFAULT: '#e11d48',
+              foreground: '#fff',
+            },
             focus: '#d98b06',
           },
           layout: {
@@ -70,6 +74,10 @@ module.exports = {
               100: '#78510f',
               50: '#452c03',
               DEFAULT: '#f59e0b',
+              foreground: '#fff',
+            },
+            danger: {
+              DEFAULT: '#e11d48',
               foreground: '#fff',
             },
             focus: '#d98b06',

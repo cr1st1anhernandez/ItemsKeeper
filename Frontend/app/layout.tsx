@@ -5,9 +5,9 @@ import { Metadata, Viewport } from 'next';
 
 import { Providers } from './providers';
 
-import { Dock } from '@/components/Dock';
-import Navbar from '@/components/navbar';
-import { SideBar } from '@/components/sidebar';
+import { Dock } from '@/components/navigation/dock';
+import Navbar from '@/components/navigation/navbar';
+import { SideBar } from '@/components/navigation/sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SideBar />
             <div className="flex min-h-[100dvh] w-full flex-col">
               <Navbar />
-              <main className="min-h-[100dvh] w-full px-6">{children}</main>
+              <main className="h-full w-full px-6 py-6">{children}</main>
             </div>
           </div>
           <Dock />

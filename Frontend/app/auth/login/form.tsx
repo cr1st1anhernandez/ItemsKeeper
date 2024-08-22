@@ -1,7 +1,7 @@
 'use client';
 import { getUser } from '@/app/_data/user';
 import { login } from '@/app/auth/login/actions';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/contexts/authContext';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';

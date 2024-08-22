@@ -20,11 +20,11 @@ export type Collection = {
   itemCount?: number;
 };
 
-export type Tag = {
+export type Category = {
   name: string;
 };
 
-export type Category = {
+export type Tag = {
   name: string;
 };
 
@@ -60,3 +60,11 @@ export interface File {
   };
   cdnUrl: string;
 }
+
+export type Comment = {
+  id: number;
+  itemId: number;
+  text: string;
+  userId: number;
+  author: string;
+};

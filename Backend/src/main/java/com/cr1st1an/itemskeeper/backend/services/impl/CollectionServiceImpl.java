@@ -85,18 +85,10 @@ public class CollectionServiceImpl implements ICollectionService {
     @Transactional
     public CollectionDTO updateCollection(CollectionDTO collectionDTO) {
         Collection collection = collectionRepository.findById(collectionDTO.getId()).orElseThrow(() -> new RuntimeException("Collection not found"));
-        Category category = categoryRepository.findByName(collectionDTO.getCategory()).orElse(null);
-        if (category == null) {
-            throw new RuntimeException("Category not found");
-        } else if (!collectionDTO.getUserId().equals(collection.getUser().getId())) {
-            throw new RuntimeException("User not found");
-        } else if (!collectionDTO.getCategory().equals(collection.getCategory().getName())) {
-            throw new RuntimeException("Category not found");
-        }
         collection.setName(collectionDTO.getName());
         collection.setDescription(collectionDTO.getDescription());
-        collection.setCategory(category);
-        collection.setImageUrl(collectionDTO.getImageUrl());
+        if(collectionDTO.getImageUrl() != null)
+            collection.setImageUrl(collectionDTO.getImageUrl());
         Collection savedCollection = collectionRepository.save(collection);
         return convertToDTOS.convertCollectionToDTO(savedCollection);
     }

@@ -1,7 +1,7 @@
 'use client';
-import { ItemComponent } from '@/components/Item';
-import { ItemSkeleton } from '@/components/itemSkeleton';
-import { Item } from '@/types';
+import { ItemCard } from '@/components/cards/itemCard';
+import { ItemSkeleton } from '@/components/skeletons/itemSkeleton';
+import { useItems } from '@/hooks/useItems';
 import {
   Tab,
   Table,
@@ -13,9 +13,7 @@ import {
   Tabs,
   getKeyValue,
 } from '@nextui-org/react';
-import axios from 'axios';
 import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, TableIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -27,25 +25,9 @@ const columns = [
 ];
 
 export const RecentItems = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { recentItems, isLoading } = useItems();
 
-  const fetchItems = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:8080/api/v1/items/recent');
-      setItems(data);
-    } catch (error) {
-      console.error('Error fetching items:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  const rows = items.map((item) => ({
+  const rows = recentItems.map((item) => ({
     key: item.id,
     name: item.name,
     tags: item.tags.map((tag) => tag.name).join(', '),
@@ -99,9 +81,9 @@ export const RecentItems = () => {
               >
                 {isLoading
                   ? skeletonSlides
-                  : items.map((item, index) => (
+                  : recentItems.map((item, index) => (
                       <SwiperSlide key={index} className="p-4">
-                        <ItemComponent {...item} />
+                        <ItemCard {...item} />
                       </SwiperSlide>
                     ))}
               </Swiper>

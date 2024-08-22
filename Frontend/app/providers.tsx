@@ -1,7 +1,7 @@
 'use client';
 
-import { AuthProvider } from '@/components/AuthProvider';
-import { CategoryProvider } from '@/contexts/CategoryContext';
+import { AuthProvider } from '@/contexts/authContext';
+import { CategoryProvider } from '@/contexts/categoryContext';
 import { NextUIProvider } from '@nextui-org/system';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ThemeProviderProps } from 'next-themes/dist/types';

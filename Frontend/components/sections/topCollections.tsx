@@ -1,6 +1,6 @@
 'use client';
-import { CollectionCard } from '@/components/collectionCard';
-import { CollectionSkeleton } from '@/components/collectionSkeleton';
+import { CollectionCard } from '@/components/cards/collectionCard';
+import { CollectionSkeleton } from '@/components/skeletons/collectionSkeleton';
 import { Collection } from '@/types';
 import {
   Tab,

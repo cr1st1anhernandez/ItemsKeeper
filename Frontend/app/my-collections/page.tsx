@@ -1,4 +1,4 @@
-import { MyCollections } from '@/components/myCollections';
+import { MyCollections } from '@/components/sections/myCollections';
 
 export default function Page() {
   return (

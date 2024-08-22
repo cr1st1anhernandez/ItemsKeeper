@@ -1,14 +1,14 @@
 'use client';
-
-import { useAuth } from '@/components/AuthProvider';
-import { AddCollection } from '@/components/addCollection';
-import { Button, Link, Tooltip } from '@nextui-org/react';
-import { FolderIcon, HeartIcon, HomeIcon, KeySquare, SettingsIcon } from 'lucide-react';
+import { useAuth } from '@/contexts/authContext';
+import { Button } from '@nextui-org/button';
+import { Link } from '@nextui-org/link';
+import { Tooltip } from '@nextui-org/react';
+import { FolderIcon, HomeIcon, KeySquare, UserRound } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
-export const Dock = () => {
+export function SideBar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const user = useAuth().user;
   const isAuthenticated = !!user;
   const isAdministator = user?.role === 'ADMIN';
 
@@ -21,15 +21,9 @@ export const Dock = () => {
       show: isAuthenticated,
     },
     {
-      href: '/favorites',
-      icon: <HeartIcon className="text-2xl" />,
-      tooltip: 'Favorites',
-      show: isAuthenticated,
-    },
-    {
-      href: '/settings',
-      icon: <SettingsIcon className="text-2xl" />,
-      tooltip: 'Settings',
+      href: '/profile',
+      icon: <UserRound className="text-2xl" />,
+      tooltip: 'Profile',
       show: isAuthenticated,
     },
     {
@@ -39,8 +33,9 @@ export const Dock = () => {
       show: isAdministator,
     },
   ];
+
   return (
-    <div className="sticky bottom-4 left-0 right-0 z-50 mx-auto flex h-16 w-64 items-center justify-between rounded-md border-2 border-neutral-400 bg-neutral-100 px-4 shadow-md dark:border-neutral-500 dark:bg-zinc-800 dark:shadow-zinc-900 md:hidden">
+    <aside className="sticky top-0 hidden h-fit flex-col items-center gap-4 pl-6 pt-4 md:flex">
       {links
         .filter((link) => link.show !== false)
         .map((link, index) => (
@@ -57,7 +52,6 @@ export const Dock = () => {
             </Button>
           </Tooltip>
         ))}
-      {isAuthenticated && <AddCollection />}
-    </div>
+    </aside>
   );
-};
+}

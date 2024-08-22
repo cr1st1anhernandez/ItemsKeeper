@@ -56,4 +56,10 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
+    @GetMapping("/collection/{collectionId}")
+    public ResponseEntity<List<ItemDTO>> getItemsByCollectionId(@PathVariable Long collectionId) {
+        List<ItemDTO> items = itemService.getItemsByCollectionId(collectionId);
+        return ResponseEntity.ok(items);
+    }
+
 }

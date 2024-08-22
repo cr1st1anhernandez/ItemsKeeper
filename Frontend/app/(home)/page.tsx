@@ -1,9 +1,9 @@
-import { Categories } from '@/components/categories';
-import { RecentItems } from '@/components/recentItems';
-import { TopCollections } from '@/components/topCollections';
+import { Categories } from '@/components/sections/categories';
+import { RecentItems } from '@/components/sections/recentItems';
+import { TopCollections } from '@/components/sections/topCollections';
 export default async function HomePage() {
   return (
-    <section className="my-8 flex w-full flex-col gap-8">
+    <section className="flex w-full flex-col gap-8">
       <Categories />
       <TopCollections />
       <RecentItems />

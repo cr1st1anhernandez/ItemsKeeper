@@ -1,7 +1,7 @@
 'use client';
 
-import { useCategories } from '@/contexts/CategoryContext';
-import { Button, Link, Skeleton } from '@nextui-org/react';
+import { useCategories } from '@/contexts/categoryContext';
+import { Card, CardHeader, Skeleton } from '@nextui-org/react';
 import { SparklesIcon } from 'lucide-react';
 
 export const Categories = () => {
@@ -16,20 +16,12 @@ export const Categories = () => {
       <div className="flex flex-wrap gap-2">
         {isLoading
           ? Array.from({ length: 16 }).map((_, index) => (
-              <Skeleton key={index} className="h-10 w-40 rounded-lg" />
+              <Skeleton key={index} className="h-10 w-20 rounded-lg" />
             ))
           : categories.map((category, index) => (
-              <Button
-                key={index}
-                href={`/category/[${category.name}]`}
-                className="cursor-pointer bg-gradient-to-br from-orange-400 to-amber-400 font-bold shadow-md shadow-orange-400/40"
-                as={Link}
-                color="primary"
-                radius="sm"
-                variant="shadow"
-              >
-                {category.name}
-              </Button>
+              <Card key={index} radius="sm">
+                <CardHeader className="font-bold">{category.name}</CardHeader>
+              </Card>
             ))}
       </div>
     </div>

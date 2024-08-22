@@ -8,8 +8,8 @@ export const CollectionCard = (collection: Collection) => {
   const router = useRouter();
   return (
     <Card
-      className="flex w-full max-w-[20rem] transform flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"
       isPressable
+      className="flex w-full max-w-[20rem] transform cursor-pointer flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"
       onPress={() => router.push(`/collections/${collection.id}`)}
     >
       <CardHeader className="flex-col items-start">

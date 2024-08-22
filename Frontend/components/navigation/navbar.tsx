@@ -1,8 +1,8 @@
 'use client';
 import { logout } from '@/app/auth/actions';
-import { useAuth } from '@/components/AuthProvider';
-import { ThemeSwitch } from '@/components/theme-switch';
+import { ThemeSwitch } from '@/components/buttons/theme-switch';
 import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/authContext';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 import {

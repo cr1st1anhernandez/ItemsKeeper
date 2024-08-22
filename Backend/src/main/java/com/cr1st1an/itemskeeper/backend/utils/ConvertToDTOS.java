@@ -22,6 +22,22 @@ public class ConvertToDTOS {
         return userDTO;
     }
 
+    public List<CommentDTO> convertCommentsToDTO(Set<Comment> comments) {
+        return comments.stream()
+                .map(this::convertCommentToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public CommentDTO convertCommentToDTO(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
+        commentDTO.setText(comment.getText());
+        commentDTO.setUserId(comment.getUser().getId());
+        commentDTO.setItemId(comment.getItem().getId());
+        commentDTO.setAuthor(comment.getUser().getName());
+        return commentDTO;
+    }
+
     public CategoryDTO convertCategoryToDTO(Category category) {
         return new CategoryDTO(category.getName());
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { backendUrl } from '@/app/_lib/definitions';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/contexts/authContext';
 import { Category } from '@/types';
 import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';

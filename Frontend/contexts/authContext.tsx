@@ -5,21 +5,35 @@ import { User } from '@/types';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextProps {
-  user: User | null;
+  user: User | null | undefined;
   setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const fetchedUser = await getUser();
-      setUser(fetchedUser);
+      try {
+        const fetchedUser = await getUser();
+        setUser(fetchedUser);
+        if (fetchedUser) {
+          localStorage.setItem('user', JSON.stringify(fetchedUser));
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setUser(null);
+      }
     };
-    fetchUser();
+
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      fetchUser();
+    }
   }, []);
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;

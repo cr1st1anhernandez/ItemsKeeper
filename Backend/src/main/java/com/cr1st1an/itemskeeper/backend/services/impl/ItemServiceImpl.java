@@ -71,6 +71,7 @@ public class ItemServiceImpl implements IItemService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Optional<ItemDTO> getItemById(Long itemId) {
         return itemRepository.findById(itemId).map(convertToDTOS::convertItemToDTO);
     }
@@ -81,15 +82,8 @@ public class ItemServiceImpl implements IItemService {
                 .orElseThrow(() -> new RuntimeException("Item not found"));
 
         item.setName(itemDTO.getName());
-        item.setTags(itemDTO.getTags().stream().map(tagDTO -> {
-            Tag tag = tagRepository.findByName(tagDTO.getName())
-                    .orElseGet(() -> tagRepository.save(new Tag()));
-            tag.setName(tagDTO.getName());
-            return tag;
-        }).collect(Collectors.toSet()));
         item.setCustomFields(itemDTO.getCustomFields());
         item.setImageUrl(itemDTO.getImageUrl());
-
         Item updatedItem = itemRepository.save(item);
         return convertToDTOS.convertItemToDTO(updatedItem);
     }
