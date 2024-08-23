@@ -4,7 +4,7 @@ import { CommentCard } from '@/components/cards/commentCard';
 import { useAuth } from '@/contexts/authContext';
 import { useComments } from '@/hooks/useComments';
 import { Comment } from '@/types';
-import { Button, Input, ScrollShadow } from '@nextui-org/react';
+import { Button, Input, ScrollShadow, Spinner } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -29,7 +29,9 @@ export const Comments = () => {
       <h2 className="text-2xl md:text-4xl">Comments</h2>
       <div className="relative w-full max-w-[60rem] rounded-md bg-neutral-200 p-4 dark:bg-neutral-900">
         <ScrollShadow hideScrollBar className="h-[18rem] w-full max-w-[60rem]">
-          {isLoading && <p>Loading comments...</p>}
+          {isLoading && (
+            <Spinner label="Loading comments..." color="primary" labelColor="primary" />
+          )}
           {error && <p>{error}</p>}
           <div className="flex flex-col gap-4">
             {comments.map((comment, index) => (

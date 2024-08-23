@@ -27,7 +27,7 @@ const columns = [
 
 export const Items = ({ items }: ItemsProps) => {
   if (!items || items.length === 0) {
-    return <p>This collection dont have items yet</p>;
+    return <p className="text-2xl">This collection dont have items yet</p>;
   }
 
   const rows = items.map((item) => ({

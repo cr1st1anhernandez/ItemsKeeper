@@ -6,6 +6,8 @@ import { InputName } from '@/components/inputs/inputName';
 import { Items } from '@/components/lists/items';
 import { LoadingPage } from '@/components/loaders/loadingPage';
 import { UploaderImages } from '@/components/uploaders/uploaderImages';
+import { useAuth } from '@/contexts/authContext';
+import { useCollection } from '@/hooks/useCollection';
 import { useItems } from '@/hooks/useItems';
 import { File, Item } from '@/types';
 import { Button } from '@nextui-org/button';
@@ -18,10 +20,12 @@ import { useEffect, useState } from 'react';
 export const Collection = () => {
   const { items, isLoading, createItem } = useItems();
   const params = useParams<{ collectionId: string }>();
+  const { collection } = useCollection();
   const collectionId = parseInt(params.collectionId);
   const [clientItems, setClientItems] = useState<Item[]>();
   const [tags, setTags] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const { theme } = useTheme();
   const toasterTheme = theme === 'light' ? 'light' : 'dark';
@@ -67,14 +71,20 @@ export const Collection = () => {
   return (
     <div className="flex flex-col gap-4">
       <CollectionHeader />
-      <Button
-        className="w-fit font-semibold"
-        endContent={<PlusIcon />}
-        color="primary"
-        onPress={onOpen}
-      >
-        Add item
-      </Button>
+      {collection?.userId === user?.id ? (
+        <Button
+          className="w-fit font-semibold"
+          endContent={<PlusIcon />}
+          color="primary"
+          onPress={onOpen}
+        >
+          Add item
+        </Button>
+      ) : (
+        <Button className="w-fit font-semibold" endContent={<PlusIcon />} isDisabled>
+          Add item
+        </Button>
+      )}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (
