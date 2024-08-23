@@ -23,7 +23,7 @@ function Submit(): JSX.Element {
       disabled={status.pending}
       type="submit"
     >
-      {status.pending ? 'Submitting...' : 'Sign Up'}
+      {status.pending ? 'Submitting...' : 'Log In'}
     </Button>
   );
 }
