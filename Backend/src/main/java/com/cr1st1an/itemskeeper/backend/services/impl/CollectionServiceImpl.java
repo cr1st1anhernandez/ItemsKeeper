@@ -76,6 +76,15 @@ public class CollectionServiceImpl implements ICollectionService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<CollectionDTO> getUserCollections(Long userId) {
+        List<Collection> collections = collectionRepository.findByUserId(userId);
+        collections.forEach(collection -> Hibernate.initialize(collection.getCategory()));
+        return collections.stream()
+                .map(convertToDTOS::convertCollectionToDTO)
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional
     public Optional<CollectionDTO> getCollectionById(Long collectionId) {

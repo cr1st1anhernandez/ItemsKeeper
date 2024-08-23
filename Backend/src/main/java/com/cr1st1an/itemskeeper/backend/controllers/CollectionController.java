@@ -46,6 +46,20 @@ public class CollectionController {
         return ResponseEntity.ok(collectionService.getAllCollections());
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<CollectionDTO>> getUserCollections(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("Authorization").substring(7);
+            Long userIdFromToken = jwtUtils.getUserIdFromJWT(token);
+            return ResponseEntity.ok(collectionService.getUserCollections(userIdFromToken));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+
     @GetMapping("/{collectionId}")
     public ResponseEntity<CollectionDTO> getCollectionById(@PathVariable Long collectionId) {
         return collectionService.getCollectionById(collectionId).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

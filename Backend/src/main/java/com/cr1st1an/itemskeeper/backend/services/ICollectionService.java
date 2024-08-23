@@ -11,4 +11,5 @@ public interface ICollectionService {
     public Optional<CollectionDTO> getCollectionById(Long collectionId);
     public CollectionDTO updateCollection(CollectionDTO collectionDTO);
     public void deleteCollection(Long collectionId);
+    public List<CollectionDTO> getUserCollections(Long userId);
 }
