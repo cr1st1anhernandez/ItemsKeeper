@@ -16,7 +16,7 @@ export const useCollections = () => {
     const fetchCollections = async () => {
       setIsLoading(true);
       try {
-        const { data } = await axios.get(`${backendUrl}collections`, {
+        const { data } = await axios.get(`${backendUrl}collections/user`, {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },
@@ -31,6 +31,8 @@ export const useCollections = () => {
     };
     if (user !== undefined) fetchCollections();
   }, [user, jwt]);
+
+  useEffect;
 
   const addNewCollection = async (newCollection: Collection, onClose: () => void) => {
     setIsLoading(true);

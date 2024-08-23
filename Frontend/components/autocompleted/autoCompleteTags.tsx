@@ -46,7 +46,7 @@ export const AutoCompleteTags = ({ setTags }: AutoCompleteTagsProps) => {
         label="Select tags"
         variant="bordered"
         defaultItems={tags}
-        className="max-w-xs"
+        className="w-full"
         allowsCustomValue={true}
         onSelectionChange={onSelectionChange}
         onInputChange={onInputChange}
