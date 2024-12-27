@@ -1,5 +1,17 @@
-FROM openjdk:17-jdk-alpine
+FROM gradle:7.6.1-jdk17-alpine AS build
+
 WORKDIR /app
-COPY deploy/ItemsKeeperBackend-0.0.1-SNAPSHOT.jar /app/itemskeeper.jar
+
+COPY . /app
+
+RUN gradle clean build -x test --no-daemon
+
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
 EXPOSE 8080
-CMD ["java", "-jar", "itemskeeper.jar"]
+
+COPY --from=build /app/build/libs/itemskeeper-backend-1.0.0-plain.jar /app/itemskeeper-backend-1.0.0-plain.jar
+
+ENTRYPOINT ["java", "-jar", "/app/itemskeeper-backend-1.0.0-plain.jar"]
