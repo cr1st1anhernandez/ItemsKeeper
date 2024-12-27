@@ -1,8 +1,8 @@
 package com.cr1st1an.itemskeeper.backend.controllers;
 
 import com.cr1st1an.itemskeeper.backend.services.ICommentService;
-import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CommentDTO;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.UserDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.validations.ObjectsValidations;
 import com.cr1st1an.itemskeeper.backend.utils.JWTUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +27,50 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+    @PostMapping("/{commentId}/{action}")
+    public ResponseEntity<Void> handleCommentAction(
+            @PathVariable Long commentId,
+            @PathVariable String action,
+            @RequestBody UserDTO userDTO) {
+        switch (action) {
+            case "like" -> commentService.likeComment(commentId, userDTO);
+            case "unlike" -> commentService.unlikeComment(commentId, userDTO);
+            case "dislike" -> commentService.dislikeComment(commentId, userDTO);
+            case "undislike" -> commentService.undislikeComment(commentId, userDTO);
+            default -> throw new IllegalArgumentException("Invalid action");
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{commentId}/status/{type}")
+    public ResponseEntity<Boolean> getCommentStatus(
+            @PathVariable Long commentId,
+            @PathVariable String type,
+            @RequestParam Long userId) {
+        boolean result = switch (type) {
+            case "liked" -> commentService.isLiked(commentId, userId);
+            case "disliked" -> commentService.isDisliked(commentId, userId);
+            default -> throw new IllegalArgumentException("Invalid status type");
+        };
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{commentId}/{type}/count")
+    public ResponseEntity<Integer> getReactionCount(
+            @PathVariable Long commentId,
+            @PathVariable String type) {
+        int count = switch (type) {
+            case "likes" -> commentService.getLikesCount(commentId);
+            case "dislikes" -> commentService.getDislikesCount(commentId);
+            default -> throw new IllegalArgumentException("Invalid count type");
+        };
+        return ResponseEntity.ok(count);
+    }
+
     @PostMapping
     public ResponseEntity<CommentDTO> addComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
         try {
-            String token = request.getHeader("Authorization").substring(7);
+            String token = jwtUtils.extractToken(request);
             Long userIdFromToken = jwtUtils.getUserIdFromJWT(token);
             commentDTO.setUserId(userIdFromToken);
             CommentDTO comment = commentService.addComment(commentDTO);

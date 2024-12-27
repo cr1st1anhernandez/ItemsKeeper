@@ -7,6 +7,7 @@ import com.cr1st1an.itemskeeper.backend.persistence.respositories.ItemRepository
 import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICommentService;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CommentDTO;
+import com.cr1st1an.itemskeeper.backend.services.models.dtos.UserDTO;
 import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Comment;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class CommentServiceImpl implements ICommentService {
 
     private final CommentRepository commentRepository;
@@ -31,7 +33,6 @@ public class CommentServiceImpl implements ICommentService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public CommentDTO addComment(CommentDTO commentDTO) {
         Long userId = commentDTO.getUserId();
         String text = commentDTO.getText();
@@ -45,9 +46,14 @@ public class CommentServiceImpl implements ICommentService {
         return(convertToDTOS.convertCommentToDTO(comment));
     }
 
-     public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
         commentRepository.delete(comment);
+    }
+
+    private Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
     }
 
     @Transactional
@@ -56,5 +62,61 @@ public class CommentServiceImpl implements ICommentService {
         return comments.stream()
                 .map(convertToDTOS::convertCommentToDTO)
                 .collect(java.util.stream.Collectors.toList());
+    }
+
+    public boolean isLiked(Long commentId, Long userId) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return comment.getLikes().contains(user);
+    }
+
+    public boolean isDisliked(Long commentId, Long userId) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return comment.getDislikes().contains(user);
+    }
+
+    public void likeComment(Long commentId, UserDTO userDTO) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        comment.addLike(user);
+        commentRepository.save(comment);
+    }
+
+    public void unlikeComment(Long commentId, UserDTO userDTO) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        comment.removeLike(user);
+        commentRepository.save(comment);
+    }
+
+    public void dislikeComment(Long commentId, UserDTO userDTO) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        comment.addDislike(user);
+        commentRepository.save(comment);
+    }
+
+    public void undislikeComment(Long commentId, UserDTO userDTO) {
+        Comment comment = getCommentById(commentId);
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        comment.removeDislike(user);
+        commentRepository.save(comment);
+    }
+
+    public int getLikesCount(Long commentId) {
+        Comment comment = getCommentById(commentId);
+        return comment.getLikesCount();
+    }
+
+    public int getDislikesCount(Long commentId) {
+        Comment comment = getCommentById(commentId);
+        return comment.getDislikesCount();
     }
 }

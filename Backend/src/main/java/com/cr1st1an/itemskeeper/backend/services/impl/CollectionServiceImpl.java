@@ -39,7 +39,7 @@ public class CollectionServiceImpl implements ICollectionService {
 
     @Transactional
     public List<CollectionDTO> getTopCollections() {
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(0, 4);
         return collectionRepository.findTopCollections(pageable)
                 .stream()
                 .map(convertToDTOS::convertCollectionToDTO)
