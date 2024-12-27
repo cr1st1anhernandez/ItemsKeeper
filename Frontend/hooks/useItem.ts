@@ -19,12 +19,7 @@ export const useItem = () => {
       if (!itemId) return;
       setIsLoading(true);
       try {
-        const { data } = await axios.get(`${backendUrl}items/${itemId}`, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-          withCredentials: true,
-        });
+        const { data } = await axios.get(`${backendUrl}items/${itemId}`);
         setItem(data);
       } catch (error) {
         setError('Error fetching collection');
@@ -32,8 +27,8 @@ export const useItem = () => {
         setIsLoading(false);
       }
     };
-    if (user !== undefined) fetchItemById(itemId);
-  }, [user, jwt]);
+    fetchItemById(itemId);
+  }, [itemId]);
 
   return { item, isLoading, error };
 };

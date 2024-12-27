@@ -8,8 +8,8 @@ export const CollectionCard = (collection: Collection) => {
   const router = useRouter();
   return (
     <Card
+      className="flex max-w-[25rem] transform cursor-pointer items-start justify-start p-4 text-left transition hover:scale-105"
       isPressable
-      className="flex w-full max-w-[20rem] transform cursor-pointer flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"
       onPress={() => router.push(`/collections/${collection.id}`)}
     >
       <CardHeader className="flex-col items-start">
@@ -33,7 +33,7 @@ export const CollectionCard = (collection: Collection) => {
       </CardBody>
       <CardFooter className="flex flex-col items-start justify-start gap-2 text-pretty text-left">
         <h4 className="text-3xl font-bold">{collection.name}</h4>
-        <p className="text-sm font-semibold uppercase opacity-70">{collection.description}</p>
+        <p className="text-sm font-semibold opacity-70">{collection.description}</p>
         <div className="flex w-full flex-col items-end text-pretty">
           <h4 className="text-sm font-semibold uppercase text-orange-400">Created by</h4>
           <p className="text-sm font-semibold opacity-90">{collection.creatorName}</p>

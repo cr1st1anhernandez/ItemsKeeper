@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Skeleton } from '@nextui-org/react';
 
-export const ItemSkeleton = () => {
+export const CollectionCardSkeleton = () => {
   return (
     <Card className="flex w-full max-w-[20rem] flex-col items-start justify-start p-4 text-left">
       <CardHeader className="flex-col items-start">

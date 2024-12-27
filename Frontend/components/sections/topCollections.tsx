@@ -1,7 +1,7 @@
 'use client';
 import { backendUrl } from '@/app/_lib/definitions';
 import { CollectionCard } from '@/components/cards/collectionCard';
-import { CollectionSkeleton } from '@/components/skeletons/collectionSkeleton';
+import { CollectionCardSkeleton } from '@/components/skeletons/collectionCardSkeleton';
 import { Collection } from '@/types';
 import {
   Tab,
@@ -15,7 +15,7 @@ import {
   getKeyValue,
 } from '@nextui-org/react';
 import axios from 'axios';
-import { ChevronLeftIcon, ChevronRightIcon, LayersIcon, TableIcon, TrophyIcon } from 'lucide-react';
+import { LayersIcon, TableIcon, TrophyIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -46,12 +46,6 @@ export const TopCollections = () => {
     fetchCollections();
   }, []);
 
-  const skeletonSlides = Array.from({ length: 5 }).map((_, index) => (
-    <SwiperSlide key={index} className="p-4">
-      <CollectionSkeleton />
-    </SwiperSlide>
-  ));
-
   const rows = collections.map((collection) => ({
     key: collection.id,
     name: collection.name,
@@ -61,7 +55,7 @@ export const TopCollections = () => {
   }));
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex w-full flex-col gap-6">
       <header className="flex items-center gap-6">
         <h2 className="text-2xl font-semibold md:text-4xl lg:text-3xl">Top collections</h2>
         <TrophyIcon className="text-orange-400" />
@@ -69,43 +63,36 @@ export const TopCollections = () => {
       <div className="flex w-full flex-col">
         <Tabs aria-label="Options">
           <Tab key="Collections" title={<LayersIcon />}>
-            <div className="relative flex max-w-screen-2xl gap-4">
-              <ChevronLeftIcon
-                className="absolute -left-12 top-1/2 z-20 -translate-y-1/2 animate-fade-left opacity-20 animate-duration-[2000ms] animate-infinite"
-                size={40}
-              />
-              <ChevronRightIcon
-                className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 animate-fade-right opacity-20 animate-duration-[2000ms] animate-infinite"
-                size={40}
-              />
+            <div className="relative flex gap-4 md:hidden">
               <Swiper
                 spaceBetween={5}
                 breakpoints={{
                   320: {
                     slidesPerView: 1,
                   },
-                  768: {
-                    slidesPerView: 2,
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                  },
-                  1440: {
-                    slidesPerView: 3,
-                  },
-                  1500: {
-                    slidesPerView: 4,
-                  },
                 }}
               >
                 {isLoading
-                  ? skeletonSlides
+                  ? Array.from({ length: 4 }).map((_, index) => (
+                      <SwiperSlide key={index} className="p-4">
+                        <CollectionCardSkeleton />
+                      </SwiperSlide>
+                    ))
                   : collections.map((collection) => (
                       <SwiperSlide key={collection.id} className="p-4">
                         <CollectionCard {...collection} />
                       </SwiperSlide>
                     ))}
               </Swiper>
+            </div>
+            <div className="hidden grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-8 md:grid">
+              {isLoading
+                ? Array.from({ length: 4 }).map((_, index) => (
+                    <CollectionCardSkeleton key={index} />
+                  ))
+                : collections.map((collection) => (
+                    <CollectionCard key={collection.id} {...collection} />
+                  ))}
             </div>
           </Tab>
           <Tab key="TableTopCollections" title={<TableIcon />}>

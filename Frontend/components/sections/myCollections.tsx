@@ -1,13 +1,11 @@
 'use client';
 import { CollectionCard } from '@/components/cards/collectionCard';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import {
   Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
-  Skeleton,
   useDisclosure,
 } from '@nextui-org/react';
 import { PlusIcon } from 'lucide-react';
@@ -17,7 +15,7 @@ import { Toaster } from 'sonner';
 import { AutoCompleteCategories } from '@/components/autocompleted/autoCompleteCategories';
 import { InputDescription } from '@/components/inputs/inputDescription';
 import { InputName } from '@/components/inputs/inputName';
-import { LoadingPage } from '@/components/loaders/loadingPage';
+import { CollectionCardSkeleton } from '@/components/skeletons/collectionCardSkeleton';
 import { UploaderImages } from '@/components/uploaders/uploaderImages';
 import { useAuth } from '@/contexts/authContext';
 import { useCategories } from '@/contexts/categoryContext';
@@ -79,20 +77,25 @@ export const MyCollections = () => {
     });
   };
 
-  if (!user || !categories) return <LoadingPage />;
   return (
-    <section className="h-fit w-full py-8 md:py-10">
-      <div className="flex h-fit w-full flex-col gap-8">
-        <Toaster richColors theme={toasterTheme} />
-        <Button
-          className="w-fit font-semibold"
-          onPress={onOpen}
-          color="primary"
-          endContent={<PlusIcon className="text-2xl" />}
-          variant="shadow"
-        >
-          Add new collection
-        </Button>
+    <section className="h-fit w-full">
+      <div className="relative flex h-fit w-full flex-col gap-8">
+        <header className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold md:text-4xl">My collections</h2>
+            <p className="font-semibold opacity-50">A list of all your collections</p>
+          </div>
+          <Button
+            className="w-fit font-semibold"
+            onPress={onOpen}
+            color="primary"
+            endContent={<PlusIcon className="text-2xl" />}
+            variant="shadow"
+          >
+            Add new collection
+          </Button>
+        </header>
+        <Toaster theme={toasterTheme} />
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
           <ModalContent>
             {(onClose) => (
@@ -133,33 +136,9 @@ export const MyCollections = () => {
             )}
           </ModalContent>
         </Modal>
-        <div className="flex flex-wrap gap-8">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-8">
           {isLoading
-            ? Array.from({ length: 16 }).map((_, index) => (
-                <Card
-                  key={index}
-                  className="flex w-full max-w-[20rem] flex-col items-start justify-start p-4 text-left"
-                >
-                  <CardHeader className="flex-col items-start">
-                    <Skeleton className="w-full rounded-lg">
-                      <div className="h-5 w-3/5 rounded-lg bg-default-200"></div>
-                    </Skeleton>
-                  </CardHeader>
-                  <CardBody className="w-full overflow-visible">
-                    <Skeleton className="rounded-lg">
-                      <div className="h-[12rem] w-[20rem] rounded-xl bg-default-300"></div>
-                    </Skeleton>
-                  </CardBody>
-                  <CardFooter className="flex flex-col items-start justify-start gap-2 text-left">
-                    <Skeleton className="w-4/5 rounded-lg">
-                      <div className="h-14 w-4/5 rounded-lg bg-default-200"></div>
-                    </Skeleton>
-                    <Skeleton className="w-3/5 rounded-lg">
-                      <div className="h-4 w-3/5 rounded-lg bg-default-200"></div>
-                    </Skeleton>
-                  </CardFooter>
-                </Card>
-              ))
+            ? Array.from({ length: 16 }).map((_, index) => <CollectionCardSkeleton key={index} />)
             : collections.map((collection) => (
                 <CollectionCard key={collection.id} {...collection} />
               ))}

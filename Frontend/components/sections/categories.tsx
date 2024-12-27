@@ -15,7 +15,7 @@ export const Categories = () => {
       </header>
       <div className="flex flex-wrap gap-2">
         {isLoading
-          ? Array.from({ length: 16 }).map((_, index) => (
+          ? Array.from({ length: 32 }).map((_, index) => (
               <Skeleton key={index} className="h-10 w-20 rounded-lg" />
             ))
           : categories.map((category, index) => (

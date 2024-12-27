@@ -1,6 +1,6 @@
 'use client';
 import { ItemCard } from '@/components/cards/itemCard';
-import { ItemSkeleton } from '@/components/skeletons/itemSkeleton';
+import { ItemCardSkeleton } from '@/components/skeletons/itemCardSkeleton';
 import { useItems } from '@/hooks/useItems';
 import {
   Tab,
@@ -13,7 +13,7 @@ import {
   Tabs,
   getKeyValue,
 } from '@nextui-org/react';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, TableIcon } from 'lucide-react';
+import { ClockIcon, TableIcon } from 'lucide-react';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -35,58 +35,34 @@ export const RecentItems = () => {
     customFields: JSON.stringify(item.customFields),
   }));
 
-  const skeletonSlides = Array.from({ length: 5 }).map((_, index) => (
-    <SwiperSlide key={index} className="p-4">
-      <ItemSkeleton />
-    </SwiperSlide>
-  ));
-
   return (
     <section className="flex flex-col gap-6">
-      <header className="flex items-center gap-6 pl-6">
+      <header className="flex items-center gap-6">
         <h2 className="text-2xl font-semibold md:text-4xl lg:text-3xl">Recent Items</h2>
         <ClockIcon className="text-orange-400" />
       </header>
       <div className="flex w-full flex-col">
         <Tabs aria-label="Options">
           <Tab key="Items" title={<ClockIcon />}>
-            <div className="relative flex max-w-screen-2xl gap-4">
-              <ChevronLeftIcon
-                className="absolute -left-12 top-1/2 z-20 -translate-y-1/2 animate-fade-left opacity-20 animate-duration-[1500ms] animate-infinite"
-                size={40}
-              />
-              <ChevronRightIcon
-                className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 animate-fade-right opacity-20 animate-duration-[1500ms] animate-infinite"
-                size={40}
-              />
-              <Swiper
-                spaceBetween={5}
-                breakpoints={{
-                  320: {
-                    slidesPerView: 1,
-                  },
-                  768: {
-                    slidesPerView: 2,
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                  },
-                  1440: {
-                    slidesPerView: 3,
-                  },
-                  1500: {
-                    slidesPerView: 4,
-                  },
-                }}
-              >
+            <div className="relative flex max-w-screen-2xl gap-4 md:hidden">
+              <Swiper spaceBetween={5} slidesPerView={1}>
                 {isLoading
-                  ? skeletonSlides
+                  ? Array.from({ length: 4 }).map((_, index) => (
+                      <SwiperSlide key={index} className="p-4">
+                        <ItemCardSkeleton />
+                      </SwiperSlide>
+                    ))
                   : recentItems.map((item, index) => (
                       <SwiperSlide key={index} className="p-4">
                         <ItemCard {...item} />
                       </SwiperSlide>
                     ))}
               </Swiper>
+            </div>
+            <div className="hidden grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-8 md:grid">
+              {isLoading
+                ? Array.from({ length: 4 }).map((_, index) => <ItemCardSkeleton key={index} />)
+                : recentItems.map((item, index) => <ItemCard key={index} {...item} />)}
             </div>
           </Tab>
           <Tab key="TableRecentItems" title={<TableIcon />}>

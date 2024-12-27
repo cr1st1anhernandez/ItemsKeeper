@@ -4,7 +4,6 @@ import { AutoCompleteTags } from '@/components/autocompleted/autoCompleteTags';
 import { CollectionHeader } from '@/components/headers/collectionHeader';
 import { InputName } from '@/components/inputs/inputName';
 import { Items } from '@/components/lists/items';
-import { LoadingPage } from '@/components/loaders/loadingPage';
 import { UploaderImages } from '@/components/uploaders/uploaderImages';
 import { useAuth } from '@/contexts/authContext';
 import { useCollection } from '@/hooks/useCollection';
@@ -66,25 +65,25 @@ export const Collection = () => {
     }
   }, [items]);
 
-  if (isLoading) return <LoadingPage />;
-
   return (
     <div className="flex flex-col gap-4">
-      <CollectionHeader />
-      {collection?.userId === user?.id ? (
-        <Button
-          className="w-fit font-semibold"
-          endContent={<PlusIcon />}
-          color="primary"
-          onPress={onOpen}
-        >
-          Add item
-        </Button>
-      ) : (
-        <Button className="w-fit font-semibold" endContent={<PlusIcon />} isDisabled>
-          Add item
-        </Button>
-      )}
+      <header className="flex flex-col gap-2 md:flex-row md:justify-between md:gap-0">
+        <CollectionHeader />
+        {collection?.userId === user?.id ? (
+          <Button
+            className="w-fit font-semibold"
+            endContent={<PlusIcon />}
+            color="primary"
+            onPress={onOpen}
+          >
+            Add item
+          </Button>
+        ) : (
+          <Button className="w-fit font-semibold" endContent={<PlusIcon />} isDisabled>
+            Add item
+          </Button>
+        )}
+      </header>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (

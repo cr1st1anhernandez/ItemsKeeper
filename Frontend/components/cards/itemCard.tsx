@@ -8,7 +8,7 @@ export const ItemCard = (item: Item) => {
   const router = useRouter();
   return (
     <Card
-      className="flex w-full max-w-[20rem] transform flex-col items-start justify-start p-4 text-left shadow-none outline-2 outline-zinc-300 transition hover:scale-105 dark:shadow-lg dark:outline-none"
+      className="flex w-full max-w-[25rem] transform flex-col items-start justify-start p-4 text-left transition hover:scale-105"
       isPressable
       onPress={() => router.push(`/items/${item.id}`)}
     >

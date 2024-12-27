@@ -23,7 +23,7 @@ export const UploaderImages = ({
     <div>
       <div className="flex flex-col gap-4 text-sm opacity-70">
         <div className="flex flex-col gap-1">
-          <span className="font-bold opacity-65">(Optional)</span>
+          <span className="opacity-65">(Optional)</span>
           <p className="font-semibold">Upload a cover image for your {uploaderName}</p>
         </div>
         <FileUploaderRegular
@@ -38,7 +38,7 @@ export const UploaderImages = ({
       </div>
       <div>
         {files.map((file) => (
-          <div className="overflow-hidden rounded-lg" key={file.uuid}>
+          <div className="mt-4 w-1/2 overflow-hidden rounded-lg" key={file.uuid}>
             <img src={file.cdnUrl} alt={file.fileInfo.originalFilename} />
           </div>
         ))}
