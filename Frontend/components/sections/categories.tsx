@@ -1,7 +1,7 @@
 'use client';
 
 import { useCategories } from '@/contexts/categoryContext';
-import { Card, CardHeader, Skeleton } from '@nextui-org/react';
+import { Button, Link, Skeleton } from '@nextui-org/react';
 import { SparklesIcon } from 'lucide-react';
 
 export const Categories = () => {
@@ -19,9 +19,15 @@ export const Categories = () => {
               <Skeleton key={index} className="h-10 w-20 rounded-lg" />
             ))
           : categories.map((category, index) => (
-              <Card key={index} radius="sm">
-                <CardHeader className="font-bold">{category.name}</CardHeader>
-              </Card>
+              <Button
+                as={Link}
+                href={`/categories/${category.id}`}
+                key={index}
+                color="primary"
+                radius="sm"
+              >
+                {category.name}
+              </Button>
             ))}
       </div>
     </div>
