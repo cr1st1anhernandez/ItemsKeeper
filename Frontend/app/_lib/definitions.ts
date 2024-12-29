@@ -6,9 +6,10 @@ export const SignupFormSchema = z.object({
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long')
+    .max(32, 'Password must not exceed 32 characters')
     .regex(
-      /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
-      'Password must contain at least one uppercase letter and one special character',
+      /^(?=.*[A-Z])(?=.*[0-9]).{8,32}$/,
+      'Password must contain at least one uppercase letter and one number',
     ),
 });
 
@@ -17,9 +18,10 @@ export const SigninFormSchema = z.object({
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long')
+    .max(32, 'Password must not exceed 32 characters')
     .regex(
-      /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
-      'Password must contain at least one uppercase letter and one special character',
+      /^(?=.*[A-Z])(?=.*[0-9]).{8,32}$/,
+      'Password must contain at least one uppercase letter and one number',
     ),
 });
 

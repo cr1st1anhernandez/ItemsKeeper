@@ -38,6 +38,7 @@ public class ObjectsValidations {
     public ResponseDTO validateUser(User user) {
         ResponseDTO response = new ResponseDTO();
         response.setNumOfErrors(0);
+
         if (user.getName() == null || user.getName().isEmpty()) {
             response.setNumOfErrors(1);
             response.setMessage("Name is required");
@@ -47,9 +48,12 @@ public class ObjectsValidations {
         } else if (user.getPassword() == null || user.getPassword().isEmpty()) {
             response.setNumOfErrors(1);
             response.setMessage("Password is required");
-        } else if (!user.getPassword().matches("^(?=.*[A-Z])(?=.*[\\W_]).{8,}$")) {
+        } else if (user.getPassword().length() > 32) {
             response.setNumOfErrors(1);
-            response.setMessage("Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.");
+            response.setMessage("Password must not exceed 32 characters");
+        } else if (!user.getPassword().matches("^(?=.*[A-Z])(?=.*[0-9]).{8,32}$")) {
+            response.setNumOfErrors(1);
+            response.setMessage("Password must be 8-32 characters long, contain at least one uppercase letter, and one number.");
         }
         return response;
     }
@@ -57,8 +61,10 @@ public class ObjectsValidations {
     public void validatePassword(String password) {
         if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Password is required");
-        } else if (!password.matches("^(?=.*[A-Z])(?=.*[\\W_]).{8,}$")) {
-            throw new IllegalArgumentException("Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.");
+        } else if (password.length() > 32) {
+            throw new IllegalArgumentException("Password must not exceed 32 characters");
+        } else if (!password.matches("^(?=.*[A-Z])(?=.*[0-9]).{8,32}$")) {
+            throw new IllegalArgumentException("Password must be 8-32 characters long, contain at least one uppercase letter, and one number.");
         }
     }
 
