@@ -106,4 +106,13 @@ public class CollectionServiceImpl implements ICollectionService {
     public void deleteCollection(Long collectionId) {
         collectionRepository.deleteById(collectionId);
     }
+
+    @Transactional
+    public List<CollectionDTO> getCollectionsByCategoryId(Long categoryId) {
+        List<Collection> collections = collectionRepository.findByCategoryId(categoryId);
+        collections.forEach(collection -> Hibernate.initialize(collection.getCategory()));
+        return collections.stream()
+                .map(convertToDTOS::convertCollectionToDTO)
+                .collect(Collectors.toList());
+    }
 }

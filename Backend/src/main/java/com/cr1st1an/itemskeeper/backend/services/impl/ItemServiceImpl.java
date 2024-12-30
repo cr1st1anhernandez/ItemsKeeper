@@ -36,7 +36,7 @@ public class ItemServiceImpl implements IItemService {
 
     @Transactional
     public List<ItemDTO> getLastAddedItems() {
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(0, 4);
         List<Item> lastItems = itemRepository.findLastAddedItems(pageable);
         return lastItems.stream()
                 .map(convertToDTOS::convertItemToDTO)

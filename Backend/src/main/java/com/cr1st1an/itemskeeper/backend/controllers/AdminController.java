@@ -19,7 +19,6 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assign-role")
     public ResponseEntity<?> assignRole(@RequestParam Long userId, @RequestParam String roleName) {
         String result = adminService.assignRole(userId, roleName);
@@ -29,7 +28,6 @@ public class AdminController {
         return ResponseEntity.badRequest().body(result);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove-role")
     public ResponseEntity<?> removeRole(@RequestParam Long userId, @RequestParam String roleName) {
         String result = adminService.removeRole(userId, roleName);
@@ -39,14 +37,12 @@ public class AdminController {
         return ResponseEntity.badRequest().body(result);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         Iterable<User> users = adminService.getUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/block/{userId}")
     public ResponseEntity<?> blockUser(@PathVariable Long userId) {
         String result = adminService.blockUser(userId);
@@ -56,7 +52,6 @@ public class AdminController {
         return ResponseEntity.badRequest().body(result);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/unblock/{userId}")
     public ResponseEntity<?> unblockUser(@PathVariable Long userId) {
         String result = adminService.unblockUser(userId);

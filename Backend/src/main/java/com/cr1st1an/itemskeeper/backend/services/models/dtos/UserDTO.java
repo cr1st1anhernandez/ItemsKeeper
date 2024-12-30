@@ -16,4 +16,5 @@ public class UserDTO {
     private LocalDateTime createdAt;
     private boolean blocked;
     private String role;
+    private String imageUrl;
 }

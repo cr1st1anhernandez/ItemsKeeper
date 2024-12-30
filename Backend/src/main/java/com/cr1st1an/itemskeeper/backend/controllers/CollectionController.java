@@ -105,5 +105,10 @@ public class CollectionController {
         collectionService.deleteCollection(collectionId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<CollectionDTO>> getCollectionsByCategoryId(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(collectionService.getCollectionsByCategoryId(categoryId));
+    }
 }
 

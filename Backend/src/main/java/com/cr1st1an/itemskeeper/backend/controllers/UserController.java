@@ -77,15 +77,11 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{userId}/change-password")
-    public ResponseEntity<String> changePassword(@PathVariable Long userId, @RequestBody String newPassword, HttpServletRequest request) {
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody String newPassword, HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization").substring(7);
-            Long userIdFromToken = jwtUtils.getUserIdFromJWT(token);
-
-            if (!userId.equals(userIdFromToken)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para cambiar la contraseña.");
-            }
+            Long userId = jwtUtils.getUserIdFromJWT(token);
 
             userService.changePassword(userId, newPassword);
             return ResponseEntity.ok("Password changed successfully!");
@@ -93,6 +89,21 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while changing the password.");
+        }
+    }
+
+    @PutMapping("/change-image-profile")
+    public ResponseEntity<String> changeImageProfile(@RequestBody String imageUrl, HttpServletRequest request) {
+        try {
+            String token = request.getHeader("Authorization").substring(7);
+            Long userId = jwtUtils.getUserIdFromJWT(token);
+
+            userService.changeImageProfile(userId, imageUrl);
+            return ResponseEntity.ok("Image profile changed successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while changing the image profile.");
         }
     }
 }

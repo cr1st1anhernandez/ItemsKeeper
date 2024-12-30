@@ -63,4 +63,8 @@ public class User {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Comment> comments = new HashSet<>();
+
+    @Column(name = "image_url", length = 255)
+    @Size(max = 255)
+    private String imageUrl = "https://ucarecdn.com/372e64a5-45fc-4dea-9b33-13464972c5d4/userDefault.svg";
 }

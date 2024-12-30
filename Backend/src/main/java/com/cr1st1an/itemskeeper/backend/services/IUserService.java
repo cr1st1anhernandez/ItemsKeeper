@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-    public List<CollectionDTO> getUserCollections(Long userId);
-    public UserDTO getUserById(Long userId);
-    public UserDTO updateUser(Long userId, UserDTO userDTO);
-    public boolean deleteUser(Long userId);
-    public void changePassword(Long userId, String newPassword);
+    List<CollectionDTO> getUserCollections(Long userId);
+    UserDTO getUserById(Long userId);
+    UserDTO updateUser(Long userId, UserDTO userDTO);
+    boolean deleteUser(Long userId);
+    void changePassword(Long userId, String newPassword);
+    void changeImageProfile(Long userId, String imageUrl);
 }

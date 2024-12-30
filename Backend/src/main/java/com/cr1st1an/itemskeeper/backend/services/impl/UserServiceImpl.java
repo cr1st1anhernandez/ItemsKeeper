@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
@@ -46,7 +47,6 @@ public class UserServiceImpl implements IUserService {
         return user.map(convertToDTOS::convertUserToDTO).orElse(null);
     }
 
-    @Transactional
     public List<CollectionDTO> getUserCollections(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         return user.map(u -> convertToDTOS.convertCollectionsToDTO(u.getCollections())).orElse(null);
@@ -68,11 +68,22 @@ public class UserServiceImpl implements IUserService {
         }
         return null;
     }
+
     public boolean deleteUser(Long userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
             return true;
         }
         return false;
+    }
+
+    public void changeImageProfile(Long userId, String imageUrl) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            user.get().setImageUrl(imageUrl);
+            userRepository.save(user.get());
+        } else {
+            throw new IllegalArgumentException("User not found!");
+        }
     }
 }

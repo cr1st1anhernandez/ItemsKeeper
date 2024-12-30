@@ -19,6 +19,7 @@ public class ConvertToDTOS {
         userDTO.setCreatedAt(user.getCreatedAt());
         userDTO.setBlocked(user.isBlocked());
         userDTO.setRole(user.getRole().getName());
+        userDTO.setImageUrl(user.getImageUrl());
         return userDTO;
     }
 
@@ -39,7 +40,7 @@ public class ConvertToDTOS {
     }
 
     public CategoryDTO convertCategoryToDTO(Category category) {
-        return new CategoryDTO(category.getName());
+        return new CategoryDTO(category.getId(),category.getName());
     }
 
     public List<CollectionDTO> convertCollectionsToDTO(Set<Collection> collections) {
