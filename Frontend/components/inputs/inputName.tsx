@@ -8,7 +8,7 @@ type InputNameProps = {
 };
 
 export const InputName = ({ name, setName, nameOfInput }: InputNameProps) => {
-  const validateName = (name: string) => /^[A-Za-z\s]{3,30}$/.test(name);
+  const validateName = (name: string) => /^[A-Za-z0-9\s]{3,30}$/.test(name);
   const isInvalidName = useMemo(() => {
     if (name === '') return false;
     return validateName(name) ? false : true;
