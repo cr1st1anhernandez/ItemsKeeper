@@ -17,12 +17,21 @@ export const useItems = () => {
   const jwt = user?.jwt;
 
   const fetchItems = async () => {
+    if (!collectionId || isNaN(collectionId)) {
+      setError('Invalid collection ID');
+      return;
+    }
     setIsLoading(true);
     try {
       const { data } = await axios.get(`${backendUrl}collections/${collectionId}/items`);
       setItems(data);
-    } catch (error) {
-      setError('Error fetching items');
+    } catch (error: any) {
+      const status = error?.response?.status;
+      setError(
+        status === 401
+          ? 'Unauthorized: Please log in to access this collection'
+          : 'Error fetching items',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -41,6 +50,10 @@ export const useItems = () => {
   };
 
   const createItem = async (newItem: any, onClose: () => void) => {
+    if (!collectionId || isNaN(collectionId)) {
+      toast.error('Invalid collection ID');
+      return;
+    }
     setIsLoading(true);
     try {
       const config = {
@@ -55,8 +68,11 @@ export const useItems = () => {
       setItems((prev) => [...prev, data]);
       onClose();
       toast.success('Item created successfully');
-    } catch (error) {
-      setError('Error creating item');
+    } catch (error: any) {
+      const status = error?.response?.status;
+      setError(
+        status === 401 ? 'Unauthorized: Please log in to create an item' : 'Error creating item',
+      );
     } finally {
       setIsLoading(false);
     }

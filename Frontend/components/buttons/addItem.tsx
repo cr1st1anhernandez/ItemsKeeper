@@ -74,7 +74,7 @@ export const AddItem = () => {
 
   return (
     <>
-      <Toaster richColors theme={toasterTheme} />
+      <Toaster theme={toasterTheme} />
       <Button
         endContent={<PlusIcon className="text-2xl" />}
         onPress={onOpen}

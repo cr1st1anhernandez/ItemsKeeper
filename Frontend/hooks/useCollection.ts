@@ -1,5 +1,4 @@
 import { backendUrl } from '@/app/_lib/definitions';
-import { useAuth } from '@/contexts/authContext';
 import { Collection } from '@/types';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
@@ -10,30 +9,33 @@ export const useCollection = () => {
   const collectionId = parseInt(params.collectionId);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
-  const jwt = user?.jwt;
   const [collection, setCollection] = useState<Collection | null>(null);
 
-  useEffect(() => {
-    const fetchCollectionById = async (collectionId: number | null) => {
-      if (!collectionId) return;
-      setIsLoading(true);
-      try {
-        const { data } = await axios.get(`${backendUrl}collections/${collectionId}`, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-          withCredentials: true,
-        });
-        setCollection(data);
-      } catch (error) {
-        setError('Error fetching collection');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (user !== undefined) fetchCollectionById(collectionId);
-  }, [user, jwt]);
+  const fetchCollectionById = async (collectionId: number | null) => {
+    if (!collectionId || isNaN(collectionId)) {
+      setError('Invalid collection ID');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { data } = await axios.get(`${backendUrl}collections/${collectionId}`);
+      setCollection(data);
+    } catch (error: any) {
+      const status = error?.response?.status;
+      setError(
+        status === 404
+          ? 'Collection not found'
+          : 'Error fetching collection. Please try again later.',
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return { collection, isLoading, error, setCollection };
+  useEffect(() => {
+    fetchCollectionById(collectionId);
+  }, [collectionId]);
+
+  return { collection, isLoading, error, refetch: () => fetchCollectionById(collectionId) };
 };

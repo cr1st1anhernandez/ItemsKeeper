@@ -1,5 +1,6 @@
 import { CommentCard } from '@/components/cards/commentCard';
 import { CommentCardSkeleton } from '@/components/skeletons/commentCardSkeleton';
+import { useAuth } from '@/contexts/authContext';
 import { useComments } from '@/hooks/useComments';
 import { Comment } from '@/types';
 import { Button, Divider, Spinner } from '@nextui-org/react';
@@ -11,10 +12,14 @@ export const Comments = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const params = useParams<{ itemId: string }>();
   const itemId = parseInt(params.itemId);
+  const { user } = useAuth();
+  const validateForm = () => {
+    return !user || !user.jwt || !inputValue.trim();
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!inputValue.trim()) return;
+    if (validateForm()) return;
 
     const newComment: Partial<Comment> = {
       itemId: itemId,
@@ -45,7 +50,7 @@ export const Comments = () => {
           onChange={(e) => setInputValue(e.target.value)}
         />
         <footer className="flex items-center justify-end p-4">
-          <Button color="primary" size="lg" type="submit" isDisabled={!inputValue.trim()}>
+          <Button color="primary" size="lg" type="submit" isDisabled={validateForm()}>
             {isLoading ? 'Adding' : 'Submit'}
             {isLoading && <Spinner color="white" />}
           </Button>

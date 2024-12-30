@@ -24,12 +24,7 @@ export const Category = () => {
     const fetchCollections = async () => {
       setIsLoading(true);
       try {
-        const { data } = await axios.get(`${backendUrl}collections/category/${categoryId}`, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-          withCredentials: true,
-        });
+        const { data } = await axios.get(`${backendUrl}collections/category/${categoryId}`);
         console.log(data);
         setCollections(data);
       } catch (error) {
