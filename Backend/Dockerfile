@@ -1,17 +1,10 @@
 FROM gradle:7.6.1-jdk17-alpine AS build
-
 WORKDIR /app
-
-COPY . /app
-
-RUN gradle clean build -x test --no-daemon
+COPY . .
+RUN gradle build --no-daemon -x test
 
 FROM openjdk:17-jdk-alpine
-
 WORKDIR /app
-
+COPY --from=build /app/build/libs/*-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-COPY --from=build /app/build/libs/itemskeeper-backend-1.0.0-plain.jar /app/itemskeeper-backend-1.0.0-plain.jar
-
-ENTRYPOINT ["java", "-jar", "/app/itemskeeper-backend-1.0.0-plain.jar"]
+CMD ["java", "-jar", "app.jar"]
