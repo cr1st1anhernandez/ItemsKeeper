@@ -28,74 +28,65 @@ import java.util.Date;
 
 @Service
 public class JWTUtilityServiceImpl implements IJWTUtilityService {
+    @Value("${PUBLICKEY}")
+    private String publicKeyString;
 
-    @Value("classpath:jwtKeys/private_key.pem")
-    private Resource privateKeyResource;
-
-    @Value("classpath:jwtKeys/public_key.pem")
-    private Resource publicKeyResource;
+    @Value("${PRIVATEKEY}")
+    private String privateKeyString;
 
     @Override
     public String generateJWT(Long userId) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, JOSEException {
-        PrivateKey privateKey = loadPrivateKey(privateKeyResource);
-
+        PrivateKey privateKey = loadPrivateKey(privateKeyString);
         JWSSigner signer = new RSASSASigner(privateKey);
-
         Date now = new Date();
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(userId.toString())
                 .issueTime(now)
                 .expirationTime(new Date(now.getTime() + 1209600000))
                 .build();
-
         SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.RS256), claimsSet);
         signedJWT.sign(signer);
-
         return signedJWT.serialize();
     }
 
     @Override
     public JWTClaimsSet parseJWT(String jwt) throws JOSEException, IOException, ParseException, NoSuchAlgorithmException, InvalidKeySpecException {
-        PublicKey publicKey = loadPublicKey(publicKeyResource);
-
+        PublicKey publicKey = loadPublicKey(publicKeyString);
         SignedJWT signedJWT = SignedJWT.parse(jwt);
-
         JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey) publicKey);
         if (!signedJWT.verify(verifier)) {
             throw new JOSEException("Invalid signature");
         }
-
         JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
         if (claimsSet.getExpirationTime().before(new Date())) {
             throw new JOSEException("Expired token");
         }
-
         return claimsSet;
     }
 
-    private PrivateKey loadPrivateKey(Resource resource) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-        String privateKeyPEM = new String(keyBytes, StandardCharsets.UTF_8)
+    private PrivateKey loadPrivateKey(String privateKeyPEM) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        privateKeyPEM = decodePEMKey(privateKeyPEM)
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
 
         byte[] decodedKey = Base64.getDecoder().decode(privateKeyPEM);
-
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decodedKey));
     }
 
-    private PublicKey loadPublicKey(Resource resource) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-        String publicKeyPEM = new String(keyBytes, StandardCharsets.UTF_8)
+    private PublicKey loadPublicKey(String publicKeyPEM) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        publicKeyPEM = decodePEMKey(publicKeyPEM)
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");
 
         byte[] decodedKey = Base64.getDecoder().decode(publicKeyPEM);
-
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePublic(new X509EncodedKeySpec(decodedKey));
+    }
+
+    private String decodePEMKey(String encodedKey) {
+        return encodedKey.replace("\\n", "\n");
     }
 }

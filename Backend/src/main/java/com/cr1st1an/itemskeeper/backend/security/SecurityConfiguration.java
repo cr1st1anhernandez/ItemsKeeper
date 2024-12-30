@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                         authRequest
                                 .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/collections/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/admin/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()

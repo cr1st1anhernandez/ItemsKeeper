@@ -3,6 +3,7 @@ package com.cr1st1an.itemskeeper.backend.utils;
 import com.cr1st1an.itemskeeper.backend.services.impl.JWTUtilityServiceImpl;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,5 +25,13 @@ public class JWTUtils {
     public Long getUserIdFromJWT(String token) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         JWTClaimsSet claims = jwtUtilityService.parseJWT(token);
         return Long.parseLong(claims.getSubject());
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+        return authHeader.substring(7);
     }
 }
