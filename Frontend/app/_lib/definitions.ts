@@ -25,4 +25,4 @@ export const SigninFormSchema = z.object({
     ),
 });
 
-export const backendUrl = 'https://itemskeeper.onrender.com/api/v1/';
+export const backendUrl = 'https://coral-app-tj2fo.ondigitalocean.app/api/v1/';
