@@ -1,8 +1,8 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Role;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.RoleRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.RoleRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.LoginResponseDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.ResponseDTO;

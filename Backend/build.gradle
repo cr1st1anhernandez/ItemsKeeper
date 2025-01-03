@@ -20,7 +20,7 @@ repositories {
 dependencies {
 // Security
 	implementation 'com.nimbusds:nimbus-jose-jwt:9.40'
-	implementation 'org.springframework.boot:spring-boot-starter-security:3.3.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 // Lombok
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'

@@ -2,8 +2,8 @@ package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Role;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.RoleRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.RoleRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

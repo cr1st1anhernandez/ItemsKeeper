@@ -1,6 +1,6 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.TagRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.TagRepository;
 import com.cr1st1an.itemskeeper.backend.services.ITagService;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.TagDTO;
 import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;

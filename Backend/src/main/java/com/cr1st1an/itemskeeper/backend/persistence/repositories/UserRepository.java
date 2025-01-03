@@ -1,4 +1,4 @@
-package com.cr1st1an.itemskeeper.backend.persistence.respositories;
+package com.cr1st1an.itemskeeper.backend.persistence.repositories;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

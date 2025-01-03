@@ -1,7 +1,7 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.UserDTO;
 import com.cr1st1an.itemskeeper.backend.services.IUserService;

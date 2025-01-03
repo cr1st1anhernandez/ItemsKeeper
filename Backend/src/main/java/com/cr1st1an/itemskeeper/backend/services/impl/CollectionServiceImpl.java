@@ -1,9 +1,9 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Category;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.CategoryRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.CollectionRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.CategoryRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.CollectionRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICollectionService;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CollectionDTO;
 import org.hibernate.Hibernate;

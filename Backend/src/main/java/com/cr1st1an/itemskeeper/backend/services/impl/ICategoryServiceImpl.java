@@ -1,6 +1,6 @@
 package com.cr1st1an.itemskeeper.backend.services.impl;
 
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.CategoryRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.CategoryRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICategoryService;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CategoryDTO;
 import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;

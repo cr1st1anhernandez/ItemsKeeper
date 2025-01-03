@@ -2,9 +2,9 @@ package com.cr1st1an.itemskeeper.backend.services.impl;
 
 import com.cr1st1an.itemskeeper.backend.persistence.entities.Item;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.CommentRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.ItemRepository;
-import com.cr1st1an.itemskeeper.backend.persistence.respositories.UserRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.CommentRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.ItemRepository;
+import com.cr1st1an.itemskeeper.backend.persistence.repositories.UserRepository;
 import com.cr1st1an.itemskeeper.backend.services.ICommentService;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.CommentDTO;
 import com.cr1st1an.itemskeeper.backend.services.models.dtos.UserDTO;
