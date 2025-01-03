@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,7 +97,10 @@ public class ItemServiceImpl implements IItemService {
 
     @Transactional
     public List<ItemDTO> searchItems(String query, int page, int size) {
-        List<Item> items = itemRepository.searchItems(query, PageRequest.of(page, size));
+        String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
+        String cleanedQuery = decodedQuery.trim();
+        System.out.println("Searching for: " + cleanedQuery);
+        List<Item> items = itemRepository.searchItems(cleanedQuery, PageRequest.of(page, size));
         return items.stream()
                 .map(convertToDTOS::convertItemToDTO)
                 .collect(Collectors.toList());

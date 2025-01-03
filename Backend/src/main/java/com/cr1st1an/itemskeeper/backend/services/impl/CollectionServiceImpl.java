@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cr1st1an.itemskeeper.backend.persistence.entities.User;
 import com.cr1st1an.itemskeeper.backend.utils.ConvertToDTOS;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -118,7 +120,10 @@ public class CollectionServiceImpl implements ICollectionService {
 
     @Transactional
     public List<CollectionDTO> searchCollections(String query, int page, int size) {
-        return collectionRepository.searchCollections(query, PageRequest.of(page, size))
+        String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
+        String cleanedQuery = decodedQuery.trim();
+        System.out.println("Searching for: " + cleanedQuery);
+        return collectionRepository.searchCollections(cleanedQuery, PageRequest.of(page, size))
                 .stream()
                 .map(convertToDTOS::convertCollectionToDTO)
                 .collect(Collectors.toList());
