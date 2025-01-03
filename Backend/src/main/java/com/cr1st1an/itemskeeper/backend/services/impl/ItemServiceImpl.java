@@ -93,4 +93,12 @@ public class ItemServiceImpl implements IItemService {
         itemRepository.deleteById(itemId);
     }
 
+    @Transactional
+    public List<ItemDTO> searchItems(String query, int page, int size) {
+        List<Item> items = itemRepository.searchItems(query, PageRequest.of(page, size));
+        return items.stream()
+                .map(convertToDTOS::convertItemToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

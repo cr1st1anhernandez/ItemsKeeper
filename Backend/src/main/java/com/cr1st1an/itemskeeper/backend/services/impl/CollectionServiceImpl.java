@@ -115,4 +115,13 @@ public class CollectionServiceImpl implements ICollectionService {
                 .map(convertToDTOS::convertCollectionToDTO)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<CollectionDTO> searchCollections(String query, int page, int size) {
+        return collectionRepository.searchCollections(query, PageRequest.of(page, size))
+                .stream()
+                .map(convertToDTOS::convertCollectionToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,6 +1,7 @@
 'use client';
 import { logout } from '@/app/auth/actions';
 import { ThemeSwitch } from '@/components/buttons/theme-switch';
+import { SearcherCollections } from '@/components/inputs/searcherCollections';
 import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/authContext';
 import { Button } from '@nextui-org/button';
@@ -36,7 +37,9 @@ export default function Navbar() {
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
-
+      <NavbarContent className="hidden basis-3/5 sm:flex sm:basis-full" justify="center">
+        <SearcherCollections />
+      </NavbarContent>
       <NavbarContent className="hidden basis-1/5 sm:flex sm:basis-full" justify="end">
         <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />

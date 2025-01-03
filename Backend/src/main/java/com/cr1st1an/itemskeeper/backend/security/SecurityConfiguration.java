@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/items/{itemId}/comments/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/search/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->

@@ -13,4 +13,5 @@ public interface ICollectionService {
     void deleteCollection(Long collectionId);
     List<CollectionDTO> getUserCollections(Long userId);
     List<CollectionDTO> getCollectionsByCategoryId(Long categoryId);
+    List<CollectionDTO> searchCollections(String query, int page, int size);
 }

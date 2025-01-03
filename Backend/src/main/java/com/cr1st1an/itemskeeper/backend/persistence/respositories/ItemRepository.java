@@ -12,4 +12,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("SELECT i FROM Item i ORDER BY i.createdAt DESC")
     List<Item> findLastAddedItems(Pageable pageable);
+
+    @Query("SELECT i FROM Item i WHERE i.name LIKE %:query%")
+    List<Item> searchItems(String query, Pageable pageable);
 }

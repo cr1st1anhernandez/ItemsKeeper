@@ -12,4 +12,5 @@ public interface IItemService {
     Optional<ItemDTO> getItemById(Long itemId);
     ItemDTO updateItem(Long itemId, ItemDTO itemDTO);
     void deleteItem(Long itemId);
+    List<ItemDTO> searchItems(String query, int page, int size);
 }
